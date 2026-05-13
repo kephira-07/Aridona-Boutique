@@ -113,26 +113,35 @@ export default function Hero() {
             <img src={images[3].src} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" alt="Bijou" />
           </div>
         </div>
-
-                 <div className="md:hidden w-full h-100 mt-17 rounded-2xl  flex items-center flex-col overflow-hidden">
-  <Caroussel autoSlide={true} autoSlideInterval={3000}>
-    {images.map((image) => (
-      <img 
-        key={image.id}   src={image.src}     
-        alt={image.title}       
-        className="min-w-full h-full object-cover" 
-      />
-    ))}
-  </Caroussel>
-</div>
+       <div className="md:hidden w-full h-100 mt-17 rounded-2xl  flex items-center flex-col overflow-hidden">
+              <Caroussel autoSlide={true} autoSlideInterval={3000}>
+                {images.map((image) => (
+                  <img 
+                    key={image.id}   src={image.src}     
+                    alt={image.title}       
+                    className="min-w-full h-full object-cover" 
+                  />
+                ))}
+              </Caroussel>
+        </div>
         {/* Bouton Global */}
         <div className="mt-5 text-center">
-            <Link 
-  to="/boutique" 
-  className="px-20 py-2 bg-amber-500 text-white rounded-3xl font-sans hover:bg-amber-600 transition-colors shadow-lg shadow-amber-500/30"
->
-  Visiter la boutique
-</Link>
+
+
+        <div className="p-10 flex justify-center items-center bg-gray-50">
+        <Link  to="/boutique" 
+        className=" relative px-8 py-3 rounded-full 
+          bg-white text-gray-900 border-2 border-amber-300 font-parisienne text-3xl font-medium tracking-wide
+           shadow-[0_4px_0_0_rgba(251,191,36,1)]   transition-all duration-150 ease-in-out  hover:shadow-[0_10px_20px_0_rgba(251,191,36,0.5)] hover:-translate-y-1 hover:bg-amber-50 active:shadow-[0_1px_0_0_rgba(251,191,36,1)] active:translate-y-2 active:scale-[0.98]        focus:outline-none focus:ring-4 focus:ring-amber-200" >
+        <span className="inline-flex items-center gap-3">
+          <svg className="w-6 h-6 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+          </svg>
+          Visiter Boutique
+        </span>
+      </Link>
+    </div>
+
         </div>
 
       </div>

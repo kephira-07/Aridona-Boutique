@@ -1,29 +1,29 @@
-import { useContext , useState ,useEffect} from 'react';
+import React from 'react'
 import { ShopContext } from '../context/ShopContext';
+import { useState , useEffect} from 'react';
 import Titre from './Titre';
 import ProduitItem from './ProduitItem';
 
-const DerniereCollection = () => {
-  const { produits } = useContext(ShopContext);
-  
-   const [dernierProduit, setDernierProduit] = useState([]);
-   useEffect(() => {
-    setDernierProduit(produits.slice(0,10)); // On prend les 10 derniers produits
+const MeilleurVente = () => {
+    const { produits } = React.useContext(ShopContext);
+    const [meilleurVente, setMeilleurVente] = useState([]);
 
-   }, []);
+     useEffect(() => {
+            const meilleurProduit = produits.filter(produit => produit.meilleurVente); 
+            setMeilleurVente(meilleurProduit.slice(0,5));
+        }, []);
 
   return (
-    <div className='my-10'>
-      <div className='text-center py-8 text-3xl'>
-        <Titre text1='Découvrez notre' text2='dernière collection' />
+    <div>
+        <div className='text-center text-3xl py-8'><Titre text1='Découvrez notre' text2='meilleure vente' />
         <p className='w-3/4 m-auto text-xs sm:text-sm md:text-base text-gray-600'>
           Lorem ipsum dolor sit amet, consectetur adipisicing elit...
         </p>
-      </div>
-
+        </div>
+        
       <div className='grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2 gap-y-6'>
         {
-          dernierProduit.map((item, index) => (
+          meilleurVente.map((item, index) => (
             <ProduitItem 
               key={index} 
               id={item.id} 
@@ -34,8 +34,9 @@ const DerniereCollection = () => {
           ))
         }
       </div>
-    </div>
-  );
-};
 
-export default DerniereCollection;
+    </div>
+  )
+}
+
+export default MeilleurVente

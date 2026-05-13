@@ -1,9 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import { Search, ShoppingCart, User, Menu, X, Heart,ChevronRight } from 'lucide-react';
+import React, { useState, useEffect,useContext, } from 'react';
+import { Search, ShoppingCart, User, Menu, X, Heart,ChevronRight, SearchIcon } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { ShopContext } from '../context/ShopContext';
+
+
 
 
 import logo2 from '../assets/logo2.svg';
+
 
 // --- COMPOSANT HEADER (BARRE DE NAVIGATION) ---
 
@@ -11,6 +15,7 @@ export default function Navbar() {
   
   const [isScrolled, setIsScrolled] = useState(false);
   const [Visible, setVisible] = useState(false);
+  const {setMontreRecherche}=useContext(ShopContext);
   
 
   // Gestion du scroll ultra-légère
@@ -41,13 +46,8 @@ export default function Navbar() {
       <header
         className={`fixed top-8 w-full z-50 transition-all px-5 duration-300 ${
           isScrolled ? '  bg-white/95 h-25  backdrop-blur-md shadow-sm' : 'bg-white h-30 '
-        }`}
-      >
-    
-      
+        }`} >
 
-       
-        <div className="max-w-15xl mx-auto px-5 m-1 sm:px-2 lg:px-3">
           
           {/* VERSION PC (Cachée sur Mobile) */}
           <div className="hidden md:flex items-center justify-between h-24 transition-all duration-300 ">
@@ -74,79 +74,88 @@ export default function Navbar() {
               </div>
             </div>
 
-           {/* Icônes */}
-<div className="flex items-center gap-6">
-  <div className='group relative'>
-    <button className="text-gray-800 hover:text-amber-500 transition-colors cursor-pointer">
-      <User className="w-6 h-6" />
-    </button>
-    <div className='group-hover:block hidden absolute w-50 border-2 border-amber-700 dropdown-menu right-0 bg-white rounded-md shadow-lg'>
-      <div>
-        <a href="#" className='block px-4 py-2 text-xl bg-amber-50 hover:text-amber-700 font-caveat text-black hover:bg-gray-100'>Mon Compte</a>
-        <a href="#" className='block px-4 py-2 text-xl bg-amber-50 hover:text-amber-700 font-caveat text-black hover:bg-gray-100'>Mes Commandes</a>
-        <a href="#" className='block px-4 py-2 text-xl bg-amber-50 hover:text-amber-700 font-caveat text-black hover:bg-gray-100'>Déconnexion</a>
-      </div>
-    </div>
-  </div>
+                            {/* Icônes */}
+                  <div className="flex items-center gap-6">
+                    <div className='group relative'>
+                      <button className="text-gray-800 hover:text-amber-500 transition-colors cursor-pointer">
+                        <User className="w-6 h-6" />
+                      </button>
+                      <div className='group-hover:block hidden absolute w-50 border-2 border-amber-700 dropdown-menu right-0 bg-white rounded-md shadow-lg'>
+                        <div>
+                          <a href="#" className='block px-4 py-2 text-xl bg-amber-50 hover:text-amber-700 font-caveat text-black hover:bg-gray-100'>Mon Compte</a>
+                          <a href="#" className='block px-4 py-2 text-xl bg-amber-50 hover:text-amber-700 font-caveat text-black hover:bg-gray-100'>Mes Commandes</a>
+                          <a href="#" className='block px-4 py-2 text-xl bg-amber-50 hover:text-amber-700 font-caveat text-black hover:bg-gray-100'>Déconnexion</a>
+                        </div>
+                      </div>
+                    </div>
 
-  <button className="text-gray-800 hover:text-amber-500 transition-colors cursor-pointer">
-    <Heart className="w-6 h-6" />
-  </button>
+                    <button className="text-gray-800 hover:text-amber-500 transition-colors cursor-pointer">
+                      <Heart className="w-6 h-6" />
+                    </button>
 
-  <Link to="/panier">
-    <button className="text-gray-800 hover:text-amber-500 transition-colors relative">
-    <ShoppingCart className="w-6 h-6" />
-    <span className="absolute -top-1 -right-2 w-4 h-4 bg-amber-500 text-white text-[10px] flex items-center justify-center rounded-full font-bold">2</span>
-  </button>
-  </Link>
-</div>
+                    <Link to="/panier">
+                      <button className="text-gray-800 hover:text-amber-500 transition-colors relative">
+                      <ShoppingCart className="w-6 h-6" />
+                      <span className="absolute -top-1 -right-2 w-4 h-4 bg-amber-500 text-white text-[10px] flex items-center justify-center rounded-full font-bold">2</span>
+                    </button>
+                    </Link>
+                  </div>
+
 
           </div>
          
 
-          {/* VERSION MOBILE (Cachée sur PC) - Basée sur ton design Grid 2x5 */}
-          <div className="md:hidden w-full  ">
-            <div className="grid grid-rows-[50px_2fr_75px] grid-cols-5  items-center">
-              
-              {/* Ligne 1 : Logo (Col 1-2) et Icônes (Col 3-5) */}
-              <div className="col-span-2 font-serif text-xl tracking-widest text-amber-600 truncate px-1">
-                  <img 
-                               src={logo2} 
-                               alt="Logo" 
-                               className="object-contain overflow-hidden h-50 w-50 col-span-2"
-                             />
-                        
-              </div>
-              <button className="col-span-1 flex justify-center p-2 text-gray-700 hover:bg-gray-100 rounded-full relative transition-colors">
-                <ShoppingCart className="w-5 h-5" />
-                <span className="absolute top-0 right-1 w-4 h-4 bg-amber-500 text-white text-[10px] flex items-center justify-center rounded-full font-bold">2</span>
-              </button>
-              <button className="col-span-1 flex justify-center p-2 text-black hover:bg-gray-100 rounded-full transition-colors">
-                <User className="w-5 h-5" />
-              </button>
-              <button className="col-span-1 flex justify-center p-2 text-black hover:bg-gray-100 rounded-full transition-colors">
-                <Heart className="w-5 h-5" />
-              </button>
+       
+          {/* VERSION MOBILE (Cachée sur PC) */}
+              <div className="md:hidden ">
+                <div className="flex items-center justify-between gap-2">
+                  
+                  {/* 1. Menu Burger (Gauche) */}
+                  <button 
+                    className="p-2 text-black hover:bg-gray-100 rounded-full transition-colors"
+                    onClick={() => setVisible(true)}
+                  >
+                    <Menu className="w-6 h-6" />
+                  </button>
 
-              {/* Ligne 2 : Menu Burger (Col 1) et Recherche (Col 2-5) */}
-              <button 
-                className="col-span-1 flex justify-center p-2 text-black hover:bg-gray-100 rounded-full transition-colors"
-                onClick={() => setVisible(!Visible)}
-              >
-                {Visible ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-              </button>
-              <div className="col-span-4 relative w-full pr-1">
-                <input
-                  type="text"
-                  placeholder="Rechercher un produit..."
-                  className="w-full h-10 bg-gray-50 border-dashed border-2 border-amber-500 rounded-full py-2 pl-10 pr-4 focus:ring-2 focus:ring-amber-500 transition-all outline-none text-sm"
-                />
-                <Search className="absolute left-3 top-2.5 text-gray-400 w-5 h-5" />
-              </div>
+                  {/* 2. Logo (Centré) */}
+                  <div className="flex  flex-col justify-center">
+                    <Link to='/'>
+                      <img 
+                        src={logo2} 
+                        alt="Logo" 
+                        className="h-35 w-auto object-contain" 
+                      />
+                    </Link>
+                  </div>
 
-            </div>
-          </div>
-        </div>
+                  {/* 3. Icônes Actions (Droite) */}
+                  <div className="flex items-center gap-1">
+                    {/* Recherche */}
+                    <button 
+                      onClick={() => setMontreRecherche(true)}
+                      className="p-2 text-black hover:bg-gray-100 rounded-full"
+                    >
+                      <Search className="w-5 h-5" />
+                    </button>
+
+                    {/* Profil */}
+                    <button className="p-2 text-black hover:bg-gray-100 rounded-full">
+                      <User className="w-5 h-5" />
+                    </button>
+
+                    {/* Panier avec Badge */}
+                    <Link to="/panier" className="p-2 text-black hover:bg-gray-100 rounded-full relative">
+                      <ShoppingCart className="w-5 h-5" />
+                      <span className="absolute top-1 right-1 w-4 h-4 bg-amber-500 text-white text-[10px] flex items-center justify-center rounded-full font-bold">
+                        2
+                      </span>
+                    </Link>
+                  </div>
+                </div>
+              </div>
+    
+        
        
       </header>
 
@@ -181,6 +190,7 @@ export default function Navbar() {
           </div>
         </div>
       </div>
+     
     </div>
   )
 }

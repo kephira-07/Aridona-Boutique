@@ -12,17 +12,17 @@ function App() {
   return (
     <>
   
-    <Navbar/>
+     <Navbar/>
      <Routes>
-     <Route path="/" element={
-  <>
-    <Hero />
-    <Collection />
-  </>
-} />
+      <Route path="/" element={
+          <>
+            <Hero />
+            <Collection />
+          </>
+              } />
 
      
-      <Route path='/boutique' element={<Boutique />} />
+        <Route path='/boutique' element={<Boutique />} />
 
       </Routes>
     </>
