@@ -11,6 +11,8 @@ import img3 from '../assets/img3.jpg';
  import img7 from '../assets/img7.jpg';
  import img8 from '../assets/img8.jpg'; 
 const slides= [ img2,img3,img5,img6,img7,img8,im1,];
+
+
 const Caroussel = ({ children: slides, autoSlide = true, autoSlideInterval = 3000 }) => {
   const [curr, setCurr] = useState(0);
 
@@ -113,7 +115,7 @@ export default function Hero() {
             <img src={images[3].src} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" alt="Bijou" />
           </div>
         </div>
-       <div className="md:hidden w-full mt-25 h-100  rounded-2xl  flex items-center flex-col overflow-hidden">
+       <div className="md:hidden w-full mt-15 h-100  rounded-2xl  flex items-center flex-col overflow-hidden">
               <Caroussel autoSlide={true} autoSlideInterval={3000}>
                 {images.map((image) => (
                   <img 
