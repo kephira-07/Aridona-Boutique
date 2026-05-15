@@ -6,7 +6,7 @@ import Titre from '../composant/Titre';
 import ProduitItem from "../composant/ProduitItem";
 
 const Collection = () => {
-    const { produits } = React.useContext(ShopContext);
+    const { produits,recherche,montreRecherche } = React.useContext(ShopContext);
     const [showFilter, setShowFilter] = useState(false);
     const [filtreProduits, setFiltreProduits] = useState([]);
     const [categorie, setCategorie] = useState([]);
@@ -38,6 +38,9 @@ const Collection = () => {
             copieproduit = copieproduit.filter(item => categorie.includes(item.categorie));
             
         }
+        if (montreRecherche && recherche) {
+            copieproduit=copieproduit.filter(item=> item.name.toLowerCase().includes(recherche.toLowerCase())) 
+        }
         if (matiere.length > 0) {
             copieproduit=copieproduit.filter(item=> matiere.includes(item.material))
             
@@ -61,12 +64,6 @@ const Collection = () => {
 
     }
    
-    useEffect(()=>{
-        appliquerFiltre();
-
-    },categorie,matiere)
-
- 
     
     useEffect(() => {
         // Ici tu peux filtrer selon categorie/matiere
@@ -80,13 +77,18 @@ const Collection = () => {
     }, [categorie, matiere, produits]);
 
     useEffect(()=>{
+        appliquerFiltre();
+
+    },[categorie,matiere,recherche,montreRecherche])
+
+    useEffect(()=>{
       sortProduit()  
 
     },[sortType])
     return (
   <div>
   {/* En tete */}
-  {/* Ajustement du mt-35 (trop grand sur mobile) vers mt-20, puis mt-35 sur grand écran (md) */}
+
   <div className="bg-[#ffffffd3] mt-20 md:mt-35 py-6 px-4 text-center">
     <h2 className="text-3xl md:text-4xl font-stretch-50% text-[#d14f09] mb-2 uppercase tracking-widest">
       Éclat & Élégance
@@ -97,7 +99,7 @@ const Collection = () => {
   </div>
 
   {/* Conteneur principal : flex-col par défaut (mobile), row sur tablette/desktop (sm) */}
-  <div className='flex flex-col sm:flex-row gap-4 sm:gap-10 pt-10 border-t border-gray-100'>
+  <div className='flex flex-col sm:flex-row gap-4 sm:gap-10 pt-10 md:px-5 border-t border-gray-100'>
     
     {/* Colonne gauche (Filtres) */}
     <div className='min-w-full sm:min-w-60 px-4 sm:px-0'>
@@ -142,7 +144,7 @@ const Collection = () => {
       </div>
 
       {/* Grille : 2 colonnes sur mobile, 3 sur tablette, 4/5 sur desktop */}
-      <div className='grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 gap-y-8'>
+      <div className='grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-1 gap-y-8'>
         {filtreProduits.map((item, index) => (
           <ProduitItem key={index} name={item.name} price={item.price} img={item.img} />
         ))}
