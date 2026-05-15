@@ -5,6 +5,7 @@ import Collection from './pages/Home'
 
 import Navbar from './composant/Navbar'
 import { Route, Routes } from 'react-router-dom'
+import BarRecherche from './composant/BarRecherche'
 
 function App() {
   
@@ -13,10 +14,11 @@ function App() {
     <>
   
      <Navbar/>
+     <BarRecherche/>
      <Routes>
       <Route path="/" element={
           <>
-            <Hero />
+         
             <Collection />
           </>
               } />

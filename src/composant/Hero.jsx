@@ -1,5 +1,5 @@
 import React, { useState, useEffect,useCallback } from 'react';
-import {ChevronLeft ,ChevronRight } from 'lucide-react';
+import {ChevronLeft ,ChevronRight, ShoppingBag, ShoppingCartIcon } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 import im1 from '../assets/im1.jpg'; 
@@ -93,7 +93,7 @@ export default function Hero() {
 
   
   return (  
-    <main className="md:pt-45  bg-[#fffaf5] h-170">
+    <main className="md:pt-45  bg-[#fffaf5] ">
       <div className="max-w-10xl mx-auto px-1.5  h-full flex flex-col justify-center">
        
         {/* --- GRILLE PC --- */}
@@ -113,7 +113,7 @@ export default function Hero() {
             <img src={images[3].src} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" alt="Bijou" />
           </div>
         </div>
-       <div className="md:hidden w-full h-100 mt-17 rounded-2xl  flex items-center flex-col overflow-hidden">
+       <div className="md:hidden w-full mt-20 h-100  rounded-2xl  flex items-center flex-col overflow-hidden">
               <Caroussel autoSlide={true} autoSlideInterval={3000}>
                 {images.map((image) => (
                   <img 
@@ -125,24 +125,23 @@ export default function Hero() {
               </Caroussel>
         </div>
         {/* Bouton Global */}
-        <div className="mt-5 text-center">
-
-
-        <div className="p-10 flex justify-center items-center bg-gray-50">
-        <Link  to="/boutique" 
-        className=" relative px-8 py-3 rounded-full 
-          bg-white text-gray-900 border-2 border-amber-300 font-parisienne text-3xl font-medium tracking-wide
-           shadow-[0_4px_0_0_rgba(251,191,36,1)]   transition-all duration-150 ease-in-out  hover:shadow-[0_10px_20px_0_rgba(251,191,36,0.5)] hover:-translate-y-1 hover:bg-amber-50 active:shadow-[0_1px_0_0_rgba(251,191,36,1)] active:translate-y-2 active:scale-[0.98]        focus:outline-none focus:ring-4 focus:ring-amber-200" >
-        <span className="inline-flex items-center gap-3">
-          <svg className="w-6 h-6 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
-          </svg>
-          Visiter Boutique
-        </span>
+          <div className=" flex justify-center items-center bg-white ">
+             
+        <Link  to="/boutique" className='mt-10  mb-5'
+         >
+          
+               <div className='w-65 h-0.5 bg-amber-700'></div>
+        <div className='bg-amber-500 w-59 h-15 border-l-2 border-amber-500 '>
+  
+           <div className='flex items-center font-alice text-2xl h-12 bg-amber-50 w-56 p-2 hover:w-60 hover:h-15 hover:border-2 border-amber-500'>
+          <ShoppingBag className='w-5 h-5'/>
+          Visitez la Boutique
+        </div>
+        </div>
       </Link>
     </div>
 
-        </div>
+       
 
       </div>
        

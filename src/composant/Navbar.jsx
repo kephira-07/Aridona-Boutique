@@ -38,19 +38,20 @@ export default function Navbar() {
 
   return (
     <div className=''>
-         {/* --- BANDEAU ANNONCE (Optionnel) --- */}
-        <div className="fixed top-0 z-50  bg-amber-950 text-white text-xs text-center py-2 h-8 w-full font-light tracking-widest ">
+       
+      <header
+        className='fixed top-0 w-full z-50 transition-all duration-300 '>
+           {/* --- BANDEAU ANNONCE (Optionnel) --- */}
+     
+         <div className="flex items-center bg-amber-950 text-white text-xs justify-center  h-6 w-full ">
           LIVRAISON OFFERTE À PARTIR DE 150fcf D'ACHAT
         </div>
-      
-      <header
-        className={`fixed top-8 w-full z-50 transition-all px-5 duration-300 ${
-          isScrolled ? '  bg-white/95 h-25  backdrop-blur-md shadow-sm' : 'bg-white h-30 '
-        }`} >
 
           
           {/* VERSION PC (Cachée sur Mobile) */}
-          <div className="hidden md:flex items-center justify-between h-24 transition-all duration-300 ">
+          <div className={`hidden md:flex items-center justify-between px-20  transition-all duration-300  ${
+          isScrolled ? '  bg-white/65 h-23  backdrop-blur-md shadow-sm' : 'bg-white h-28 '
+        }`} >
             {/* Logo Arilona (Texte stylisé pour l'exemple, à remplacer par ton img) */}
             <div className={`font-serif tracking-widest text-amber-600 transition-all mt-5 duration-500 ${isScrolled ? 'scale-90' : 'scale-130'}`}>
              <div className="flex items-center justify-self-start cursor-pointer h-50 w-50">
@@ -107,47 +108,52 @@ export default function Navbar() {
 
        
           {/* VERSION MOBILE (Cachée sur PC) */}
-              <div className="md:hidden ">
-                <div className="flex items-center justify-between gap-2">
+              <div className="md:hidden  ">
+                <div className={`flex items-center h-15 justify-between border-b-2 border-amber-700  px-10 ${
+          isScrolled ? '  bg-white/65  backdrop-blur-md shadow-sm' : 'bg-white  '
+        }`} >
                   
                   {/* 1. Menu Burger (Gauche) */}
                   <button 
-                    className="p-2 text-black hover:bg-gray-100 rounded-full transition-colors"
+                    className=" text-black hover:bg-gray-100 rounded-full transition-colors"
                     onClick={() => setVisible(true)}
                   >
                     <Menu className="w-6 h-6" />
                   </button>
 
                   {/* 2. Logo (Centré) */}
-                  <div className="flex  flex-col justify-center">
+                  <div >
                     <Link to='/'>
                       <img 
                         src={logo2} 
                         alt="Logo" 
-                        className="h-35 w-auto object-contain" 
+                        className="h-40 w-auto object-contain" 
                       />
                     </Link>
                   </div>
 
                   {/* 3. Icônes Actions (Droite) */}
-                  <div className="flex items-center gap-1">
+                  <div className="flex items-center gap-4">
                     {/* Recherche */}
                     <button 
                       onClick={() => setMontreRecherche(true)}
-                      className="p-2 text-black hover:bg-gray-100 rounded-full"
+                      className=" text-black hover:bg-gray-100 rounded-full"
                     >
                       <Search className="w-5 h-5" />
                     </button>
 
                     {/* Profil */}
-                    <button className="p-2 text-black hover:bg-gray-100 rounded-full">
+                    <button className=" text-black hover:bg-gray-100 rounded-full">
                       <User className="w-5 h-5" />
+                    </button>
+                      <button className=" text-black hover:bg-gray-100 rounded-full">
+                      <Heart className="w-5 h-5" />
                     </button>
 
                     {/* Panier avec Badge */}
-                    <Link to="/panier" className="p-2 text-black hover:bg-gray-100 rounded-full relative">
+                    <Link to="/panier" className=" text-black hover:bg-gray-100 rounded-full relative ">
                       <ShoppingCart className="w-5 h-5" />
-                      <span className="absolute top-1 right-1 w-4 h-4 bg-amber-500 text-white text-[10px] flex items-center justify-center rounded-full font-bold">
+                      <span className="absolute  right-[-10px] bottom-3 w-4 h-4 bg-amber-500 text-white text-[10px] flex items-center justify-center rounded-full font-bold">
                         2
                       </span>
                     </Link>

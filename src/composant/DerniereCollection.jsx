@@ -13,15 +13,15 @@ const DerniereCollection = () => {
    }, []);
 
   return (
-    <div className='my-10'>
-      <div className='text-center py-8 text-3xl'>
-        <Titre text1='Découvrez notre' text2='dernière collection' />
-        <p className='w-3/4 m-auto text-xs sm:text-sm md:text-base text-gray-600'>
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit...
+    <div className=''>
+      <div className='pb-10 px-10 text-3xl'>
+        <Titre text1='Découvrez notre' text2='Dernière collection' />
+        <p className='w-3/4  text-xs sm:text-sm md:text-base font-averia text-gray-600'>
+        Voici nos nouvelles collections parfaites pour vous
         </p>
       </div>
 
-      <div className='grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2 gap-y-6'>
+      <div className=' px-2 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-1 gap-y-6'>
         {
           dernierProduit.map((item, index) => (
             <ProduitItem 
