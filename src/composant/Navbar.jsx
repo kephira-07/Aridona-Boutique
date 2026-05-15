@@ -2,6 +2,7 @@ import React, { useState, useEffect,useContext, } from 'react';
 import { Search, ShoppingCart, User, Menu, X, Heart,ChevronRight, SearchIcon } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { ShopContext } from '../context/ShopContext';
+import BarRecherche from './BarRecherche';
 
 
 
@@ -84,16 +85,8 @@ export default function Navbar() {
             </div>
 
             {/* Barre de recherche  */}
-            <div className={`flex-1 max-w-2xl mx-12 ${isScrolled ? 'scale-90' : 'scale-100'}`}>
-              <div className="relative group">
-                <input
-                  type="text"
-                  placeholder="Rechercher un bijou, une collection..."
-                  className="w-full h-11 bg-gray-50 rounded-full py-2 pl-12 pr-4  border-2 border-dashed  border-amber-700  focus:ring-2 focus:ring-amber-700 focus:border-transparent transition-all outline-none text-sm"
-                />
-                <Search className="absolute left-4 top-3 text-gray-600 w-5 h-5 transition-colors group-hover:text-amber-500" />
-              </div>
-            </div>
+               <BarRecherche isNavbar={true} />
+           
 
                             {/* Icônes */}
                   <div className="flex items-center gap-6">

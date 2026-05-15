@@ -7,6 +7,7 @@ import Navbar from './composant/Navbar'
 import { Route, Routes } from 'react-router-dom'
 import BarRecherche from './composant/BarRecherche'
 
+
 function App() {
   
 
@@ -14,7 +15,9 @@ function App() {
     <>
   
      <Navbar/>
-     <BarRecherche/>
+  <div className="md:hidden mt-20"> 
+       <BarRecherche isNavbar={false} />
+    </div>
      <Routes>
       <Route path="/" element={
           <>
