@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { ShopContext } from '../context/ShopContext';
 import { ChevronRight } from "lucide-react";
@@ -14,6 +13,7 @@ const Collection = () => {
     const [sortType,setSortType]= useState('reveler')
 
     const toggleCategorie = (e) => {
+     
         const value = e.target.value;
         if (categorie.includes(value)) {
             setCategorie(prev => prev.filter(item => item !== value));
@@ -35,7 +35,7 @@ const Collection = () => {
     const appliquerFiltre=() =>{
         let copieproduit= produits.slice();
         if (categorie.length > 0) {
-            copieproduit = copieproduit.filter(item => categorie.includes(item.categorie));
+            copieproduit = copieproduit.filter(item => categorie.includes(item.category));
             
         }
         if (montreRecherche && recherche) {
@@ -114,8 +114,10 @@ const Collection = () => {
         <div className="flex flex-col gap-2 text-sm font-light text-gray-700">
           <label className="flex items-center gap-2 cursor-pointer"><input type="checkbox" className="w-4 h-4 accent-[#d14f09]" value="Bagues" onChange={toggleCategorie}/> Bagues</label>
           <label className="flex items-center gap-2 cursor-pointer"><input type="checkbox" className="w-4 h-4 accent-[#d14f09]" value="Collier" onChange={toggleCategorie}/> Colliers</label>
-          <label className="flex items-center gap-2 cursor-pointer"><input type="checkbox" className="w-4 h-4 accent-[#d14f09]" value="Boucle d’oreille" onChange={toggleCategorie}/> Boucles d'oreilles</label>
+          <label className="flex items-center gap-2 cursor-pointer"><input type="checkbox" className="w-4 h-4 accent-[#d14f09]" value="Boucleoreille" onChange={toggleCategorie}/> Boucles d'oreilles</label>
           <label className="flex items-center gap-2 cursor-pointer"><input type="checkbox" className="w-4 h-4 accent-[#d14f09]" value="Bracelet" onChange={toggleCategorie}/> Bracelets</label>
+          <label className="flex items-center gap-2 cursor-pointer"><input type="checkbox" className="w-4 h-4 accent-[#d14f09]" value="Chainelunettes" onChange={toggleCategorie}/> Chaines de lunettes</label>
+          <label className="flex items-center gap-2 cursor-pointer"><input type="checkbox" className="w-4 h-4 accent-[#d14f09]" value="Ensemble" onChange={toggleCategorie}/> Ensemble</label>
         </div>
       </div>
 

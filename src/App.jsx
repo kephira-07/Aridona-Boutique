@@ -6,6 +6,7 @@ import Collection from './pages/Home'
 import Navbar from './composant/Navbar'
 import { Route, Routes } from 'react-router-dom'
 import BarRecherche from './composant/BarRecherche'
+import Footer from './composant/Footer'
 
 
 function App() {
@@ -30,6 +31,7 @@ function App() {
         <Route path='/boutique' element={<Boutique />} />
 
       </Routes>
+      <Footer/>
     </>
   )
 }
