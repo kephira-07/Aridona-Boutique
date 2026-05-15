@@ -43,9 +43,29 @@ export default function Navbar() {
         className='fixed top-0 w-full z-50 transition-all duration-300 '>
            {/* --- BANDEAU ANNONCE (Optionnel) --- */}
      
-         <div className="flex items-center bg-amber-950 text-white text-xs justify-center  h-6 w-full ">
-          LIVRAISON OFFERTE À PARTIR DE 150fcf D'ACHAT
-        </div>
+        <div className="relative flex items-center bg-amber-950 text-white text-xs overflow-hidden h-6 w-full">
+  <div 
+    className="flex whitespace-nowrap"
+    style={{
+      display: 'flex',
+      whiteSpace: 'nowrap',
+      animation: 'scroll-loop 20s linear infinite',
+    }}
+  >
+    {/* On définit l'animation directement dans une balise style invisible */}
+    <style>{`
+      @keyframes scroll-loop {
+        0% { transform: translateX(0); }
+        100% { transform: translateX(-50%); }
+      }
+    `}</style>
+
+    <span className="px-4">LIVRAISON OFFERTE À PARTIR DE 150 000 FCFA D'ACHAT • </span>
+    <span className="px-4">LIVRAISON OFFERTE À PARTIR DE 150 000 FCFA D'ACHAT • </span>
+    <span className="px-4">LIVRAISON OFFERTE À PARTIR DE 150 000 FCFA D'ACHAT • </span>
+    <span className="px-4">LIVRAISON OFFERTE À PARTIR DE 150 000 FCFA D'ACHAT • </span>
+  </div>
+</div>
 
           
           {/* VERSION PC (Cachée sur Mobile) */}

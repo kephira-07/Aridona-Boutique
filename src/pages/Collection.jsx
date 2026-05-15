@@ -84,65 +84,72 @@ const Collection = () => {
 
     },[sortType])
     return (
-       <div>
-     
-               {/* En tete */}
-                 <div className="bg-[#ffffffd3] mt-35 py-2 px-4 text-center">
-                    <h2 className="text-4xl font-stretch-50% text-[#d14f09] mb-2">Notre Boutique</h2>
-                    <p className="text-gray-800 font-semibold max-w-2xl mx-auto">
-                    Decouvrez nos bijoux uniques adaptés à vos besoin
-                    </p>
-                </div>
-              <div className='flex flex-col sm:flex-row gap-1 sm:gap-10 pt-10 border-t'>
-            
-            {/* Colonne gauche */}
-            <div className='min-w-60'>
-                <p onClick={() => setShowFilter(!showFilter)} className='my-2 text-xl flex items-center cursor-pointer gap-2 uppercase'>
-                    Filtres
-                    <ChevronRight className={`h-4 w-4 sm:hidden transition-transform duration-300 ${showFilter ? 'rotate-90' : ''}`} />
-                </p>
+  <div>
+  {/* En tete */}
+  {/* Ajustement du mt-35 (trop grand sur mobile) vers mt-20, puis mt-35 sur grand écran (md) */}
+  <div className="bg-[#ffffffd3] mt-20 md:mt-35 py-6 px-4 text-center">
+    <h2 className="text-3xl md:text-4xl font-stretch-50% text-[#d14f09] mb-2 uppercase tracking-widest">
+      Éclat & Élégance
+    </h2>
+    <p className="text-gray-600 italic text-sm md:text-base max-w-2xl mx-auto">
+      L'art de sublimer votre quotidien avec des pièces d'exception.
+    </p>
+  </div>
 
-                {/* Catégories */}
-                <div className={`border border-gray-300 pl-5 py-3 mt-6 ${showFilter ? '' : 'hidden'} sm:block`}>
-                    <p className="mb-3 text-sm font-medium">CATÉGORIES</p>
-                    <div className="flex flex-col gap-2 text-sm font-light text-gray-700">
-                        <label><input type="checkbox" value="Bagues" onChange={toggleCategorie}/> Bagues</label>
-                        <label><input type="checkbox" value="Collier" onChange={toggleCategorie}/> Colliers</label>
-                        <label><input type="checkbox" value="Boucle d’oreille" onChange={toggleCategorie}/> Boucles d'oreilles</label>
-                        <label><input type="checkbox" value="Bracelet" onChange={toggleCategorie}/> Bracelets</label>
-                    </div>
-                </div>
+  {/* Conteneur principal : flex-col par défaut (mobile), row sur tablette/desktop (sm) */}
+  <div className='flex flex-col sm:flex-row gap-4 sm:gap-10 pt-10 border-t border-gray-100'>
+    
+    {/* Colonne gauche (Filtres) */}
+    <div className='min-w-full sm:min-w-60 px-4 sm:px-0'>
+      <p onClick={() => setShowFilter(!showFilter)} className='my-2 text-lg md:text-xl flex items-center justify-between sm:justify-start cursor-pointer gap-2 uppercase font-medium text-gray-800'>
+        Filtres
+        <ChevronRight className={`h-4 w-4 sm:hidden transition-transform duration-300 ${showFilter ? 'rotate-90' : ''}`} />
+      </p>
 
-                {/* Matière */}
-                <div className={`border border-gray-300 pl-5 py-3 mt-6 ${showFilter ? '' : 'hidden'} sm:block`}>
-                    <p className="mb-3 text-sm font-medium">Matière: Acier inoxydable</p>
-                    <div className="flex flex-col gap-2 text-sm font-light text-gray-700">
-                        <label><input type="checkbox" value="Argenter" onChange={toggleMatiere}/> Argenté</label>
-                        <label><input type="checkbox" value="Dore" onChange={toggleMatiere}/> Doré</label>
-                        <label><input type="checkbox" value="Perle" onChange={toggleMatiere}/> Perle</label>
-                    </div>
-                </div>
-            </div>
-
-            {/* Colonne droite */}
-            <div className='flex-1'>
-                <div className="flex justify-between text-base sm:text-2xl mb-4">
-                    <Titre text1={'Toute'} text2={'la collection'} />
-                    <select onChange={(e)=>setSortType(e.target.value)} className="border border-gray-300 rounded-md px-2 py-1 text-sm">
-                        <option value="">Trier par</option>
-                        <option value="price-asc">Prix : du moins cher au plus cher</option>
-                        <option value="price-desc">Prix : du plus cher au moins cher</option>
-                    </select>
-                </div>
-
-                <div className='grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2 gap-y-6'>
-                    {filtreProduits.map((item, index) => (
-                        <ProduitItem key={index} name={item.name} price={item.price} img={item.img} />
-                    ))}
-                </div>
-            </div>
+      {/* Catégories */}
+      <div className={`border border-gray-200 rounded-sm pl-5 py-3 mt-4 ${showFilter ? 'block' : 'hidden'} sm:block transition-all`}>
+        <p className="mb-3 text-xs font-bold text-[#d14f09]">CATÉGORIES</p>
+        <div className="flex flex-col gap-2 text-sm font-light text-gray-700">
+          <label className="flex items-center gap-2 cursor-pointer"><input type="checkbox" className="w-4 h-4 accent-[#d14f09]" value="Bagues" onChange={toggleCategorie}/> Bagues</label>
+          <label className="flex items-center gap-2 cursor-pointer"><input type="checkbox" className="w-4 h-4 accent-[#d14f09]" value="Collier" onChange={toggleCategorie}/> Colliers</label>
+          <label className="flex items-center gap-2 cursor-pointer"><input type="checkbox" className="w-4 h-4 accent-[#d14f09]" value="Boucle d’oreille" onChange={toggleCategorie}/> Boucles d'oreilles</label>
+          <label className="flex items-center gap-2 cursor-pointer"><input type="checkbox" className="w-4 h-4 accent-[#d14f09]" value="Bracelet" onChange={toggleCategorie}/> Bracelets</label>
         </div>
-       </div>
+      </div>
+
+      {/* Matière */}
+      <div className={`border border-gray-200 rounded-sm pl-5 py-3 mt-4 ${showFilter ? 'block' : 'hidden'} sm:block transition-all`}>
+        <p className="mb-3 text-xs font-bold text-[#d14f09]">MATIÈRE</p>
+        <div className="flex flex-col gap-2 text-sm font-light text-gray-700">
+          <label className="flex items-center gap-2 cursor-pointer"><input type="checkbox" className="w-4 h-4 accent-[#d14f09]" value="Argenter" onChange={toggleMatiere}/> Argenté</label>
+          <label className="flex items-center gap-2 cursor-pointer"><input type="checkbox" className="w-4 h-4 accent-[#d14f09]" value="Dore" onChange={toggleMatiere}/> Doré</label>
+          <label className="flex items-center gap-2 cursor-pointer"><input type="checkbox" className="w-4 h-4 accent-[#d14f09]" value="Perle" onChange={toggleMatiere}/> Perle</label>
+        </div>
+      </div>
+    </div>
+
+    {/* Colonne droite (Produits) */}
+    <div className='flex-1 px-4 sm:px-0'>
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
+        <Titre text1={'Toute'} text2={'la collection'} />
+        
+        {/* Select plus large sur mobile pour faciliter le clic */}
+        <select onChange={(e)=>setSortType(e.target.value)} className="w-full md:w-auto border border-gray-300 rounded-sm px-3 py-2 text-sm bg-white focus:ring-1 focus:ring-[#d14f09] outline-none">
+          <option value="">Trier par : Pertinence</option>
+          <option value="price-asc">Prix : Croissant</option>
+          <option value="price-desc">Prix : Décroissant</option>
+        </select>
+      </div>
+
+      {/* Grille : 2 colonnes sur mobile, 3 sur tablette, 4/5 sur desktop */}
+      <div className='grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 gap-y-8'>
+        {filtreProduits.map((item, index) => (
+          <ProduitItem key={index} name={item.name} price={item.price} img={item.img} />
+        ))}
+      </div>
+    </div>
+  </div>
+</div>
     );
 };
 
