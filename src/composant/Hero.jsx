@@ -93,7 +93,7 @@ export default function Hero() {
 
   
   return (  
-    <main className="md:pt-30  bg-[#fffaf5] ">
+    <main className="md:pt-35  bg-[#fffaf5] ">
       <div className="max-w-10xl mx-auto px-1.5  h-full flex flex-col justify-center">
        
         {/* --- GRILLE PC --- */}
@@ -113,7 +113,7 @@ export default function Hero() {
             <img src={images[3].src} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" alt="Bijou" />
           </div>
         </div>
-       <div className="md:hidden w-full mt-20 h-100  rounded-2xl  flex items-center flex-col overflow-hidden">
+       <div className="md:hidden w-full mt-18 h-100  rounded-2xl  flex items-center flex-col overflow-hidden">
               <Caroussel autoSlide={true} autoSlideInterval={3000}>
                 {images.map((image) => (
                   <img 
