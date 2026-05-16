@@ -1,206 +1,155 @@
-import React, { useState ,useParams} from 'react';
-import { Search, ShoppingCart, User, Menu, Heart, ChevronRight, MessageCircle, Truck, ShieldCheck, Sparkles, ChevronDown, ChevronUp } from 'lucide-react';
+import { useContext,useEffect,useState } from 'react'
+import React  from 'react'
+import { useParams } from 'react-router-dom'
+import {ShopContext} from '../context/ShopContext'
+import { Star } from 'lucide-react'
+import ApparenteProduit from '../composant/ApparenteProduit'
 
-
-
-export default function PageProduit() {
- const [mainImage, setMainImage] = useState(PRODUCT.images[0]);
-  const [isDetailsOpen, setIsDetailsOpen] = useState(true);
-  const [isCareOpen, setIsCareOpen] = useState(false);
-
-  // --- LOGIQUE WHATSAPP ---
-  const handleWhatsAppOrder = () => {
-    const {id} = useParams();
-    // Numéro de téléphone au format international (sans le +), ex pour le Togo : 228...
-    const phoneNumber = "22890000000"; 
-    const message = `Bonjour Arilona ✨,\n\nJe souhaite commander :\n*${PRODUCT.name}*\nMatière : ${PRODUCT.material}\nPrix : ${PRODUCT.price} F\n\nPouvez-vous m'indiquer les modalités de paiement et de livraison ? Merci !`;
-    
-    // Encodage du message pour l'URL
-    const encodedMessage = encodeURIComponent(message);
-    const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
-    
-    // Ouvre WhatsApp dans un nouvel onglet
-    window.open(whatsappUrl, '_blank');
-  };
-
+const PageProduit = () => {
+  const {produitId}=useParams();
+  const {produits,monnaie,ajouterPanier}= useContext(ShopContext);
+  const [produitData,setProduitData]=useState(false);
+  const [image,setImage]=useState('');
  
-  return (
-    <div className="min-h-screen bg-white font-sans text-gray-900">
-     <BandeAnnonce/>
-     <Header/>
-     
-     
+  const [size,setSize]=useState('');
 
-      {/* --- FIL D'ARIANE (Breadcrumb) --- */}
-      <div className="max-w-7xl mx-auto px-4 py-6">
-        <nav className="flex items-center text-xs text-gray-400 uppercase tracking-wider font-light">
-        
-          <a href="#" className="hover:text-[#7B5C46] transition-colors">{PRODUCT.category}</a>
-          <ChevronRight className="w-3 h-3 mx-2" />
-          <span className="text-[#7B5C46]">{PRODUCT.name}</span>
-        </nav>
+  const fetchProduitData= async ()=>{
+    produits.map((item)=>{
+      if(item._id === produitId){
+        setProduitData(item);
+        setImage(item.img[0]);
+     
+        return null
+      } 
+    })
+  }
+  useEffect(()=>{
+    fetchProduitData();
+  },[produitId,produits])
+  return produitData ? (
+  <div className='border-t-2 mt-20 md:mt-32 pt-10 transition-opacity ease-in duration-500 opacity-100'>
+  {/* --- Conteneur Principal --- */}
+  <div className='flex gap-8 lg:gap-16 flex-col md:flex-row px-4 md:px-10 lg:px-20'>
+    
+    {/* --- SECTION IMAGES --- */}
+    <div className='flex-1 flex flex-col-reverse gap-3 md:flex-row'>
+      
+      {/* Liste des miniatures */}
+      <div className='flex md:flex-col overflow-x-auto md:overflow-y-auto justify-start gap-3 md:w-[20%] w-full no-scrollbar'>
+        {produitData.img.map((item, index) => (
+          <div 
+            key={index}
+            onClick={() => setImage(item)}
+            className={`relative flex-shrink-0 w-20 h-20 sm:w-24 sm:h-24 md:w-full aspect-square cursor-pointer border-2 transition-all duration-300 rounded-md overflow-hidden
+              ${image === item ? 'border-amber-600 shadow-sm' : 'border-transparent hover:border-amber-200'}`}
+          >
+            <img 
+              src={item} 
+              className='w-full h-full object-cover'
+              alt={`Miniature ${index}`}
+            />
+          </div>
+        ))}
       </div>
 
-      {/* --- SECTION PRODUIT PRINCIPALE --- */}
-      <main className="max-w-7xl mx-auto px-4 pb-20 flex flex-col md:flex-row gap-10 lg:gap-16">
-        
-        {/* Colonne Gauche : Galerie d'images */}
-        <div className="w-full md:w-1/2 flex flex-col gap-4">
-          {/* Image Principale */}
-          <div className="w-full aspect-[4/5] bg-[#FAF6F0] rounded-2xl overflow-hidden relative">
-            <img 
-              src={mainImage} 
-              alt={PRODUCT.name} 
-              className="w-full h-full object-cover transition-opacity duration-500"
-            />
-            <button className="absolute top-4 right-4 p-3 bg-white/80 backdrop-blur-sm rounded-full text-gray-400 hover:text-red-500 transition-colors">
-              <Heart className="w-5 h-5" />
-            </button>
-          </div>
-          
-          {/* Miniatures */}
-          <div className="flex gap-4 overflow-x-auto pb-2 scrollbar-hide">
-            {PRODUCT.images.map((img, index) => (
-              <button 
-                key={index} 
-                onClick={() => setMainImage(img)}
-                className={`w-20 md:w-24 aspect-square rounded-lg overflow-hidden shrink-0 border-2 transition-all ${mainImage === img ? 'border-[#7B5C46] opacity-100' : 'border-transparent opacity-60 hover:opacity-100'}`}
-              >
-                <img src={img} alt={`Miniature ${index + 1}`} className="w-full h-full object-cover" />
-              </button>
-            ))}
-          </div>
+      {/* Image Principale */}
+      <div className='w-full md:w-[80%]'>
+        <div className='aspect-square w-full overflow-hidden rounded-xl bg-stone-50 border border-stone-100'>
+          <img 
+            src={image} 
+            alt={produitData.name} 
+            className='w-full h-full object-cover transition-transform duration-500 hover:scale-105'
+          />
         </div>
-
-        {/* Colonne Droite : Infos Produit */}
-        <div className="w-full md:w-1/2 flex flex-col pt-4 md:pt-10">
-          <span className="text-xs text-[#7B5C46] uppercase tracking-widest font-bold mb-2">{PRODUCT.material}</span>
-          <h1 className="text-3xl md:text-4xl font-serif text-gray-900 mb-4">{PRODUCT.name}</h1>
-          <p className="text-2xl font-serif text-[#7B5C46] mb-8">{PRODUCT.price} F</p>
-          
-          <p className="text-gray-600 font-light leading-relaxed mb-8">
-            {PRODUCT.description}
-          </p>
-
-          {/* Bouton de Commande WhatsApp */}
-          <button 
-            onClick={handleWhatsAppOrder}
-            className="w-full md:w-4/5 py-4 px-6 bg-[#7B5C46] text-white rounded-full flex items-center justify-center gap-3 hover:bg-[#5A4333] transition-colors shadow-lg shadow-[#7B5C46]/20 mb-10 group"
-          >
-            <MessageCircle className="w-5 h-5 group-hover:scale-110 transition-transform" />
-            <span className="font-medium tracking-wide">Commander sur WhatsApp</span>
-          </button>
-
-          {/* Réassurance */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 py-8 border-y border-[#EAE0D5] mb-8">
-            <div className="flex flex-col items-center text-center gap-2">
-              <Truck className="w-6 h-6 text-[#7B5C46]" />
-              <span className="text-xs text-gray-500 font-medium uppercase tracking-wider">Livraison Rapide</span>
-            </div>
-            <div className="flex flex-col items-center text-center gap-2">
-              <Sparkles className="w-6 h-6 text-[#7B5C46]" />
-              <span className="text-xs text-gray-500 font-medium uppercase tracking-wider">Fait main</span>
-            </div>
-            <div className="flex flex-col items-center text-center gap-2">
-              <ShieldCheck className="w-6 h-6 text-[#7B5C46]" />
-              <span className="text-xs text-gray-500 font-medium uppercase tracking-wider">Garantie 1 an</span>
-            </div>
-          </div>
-
-          {/* Accordéons d'informations */}
-          <div className="flex flex-col">
-            {/* Détails du produit */}
-            <div className="border-b border-[#EAE0D5]">
-              <button 
-                onClick={() => setIsDetailsOpen(!isDetailsOpen)}
-                className="w-full py-4 flex items-center justify-between text-left text-gray-900 font-medium hover:text-[#7B5C46] transition-colors"
-              >
-                Caractéristiques
-                {isDetailsOpen ? <ChevronUp className="w-5 h-5" /> : <ChevronDown className="w-5 h-5" />}
-              </button>
-              <div className={`overflow-hidden transition-all duration-300 ${isDetailsOpen ? 'max-h-48 pb-4' : 'max-h-0'}`}>
-                <ul className="list-disc pl-5 space-y-2 text-sm text-gray-600 font-light">
-                  {PRODUCT.details.map((detail, idx) => (
-                    <li key={idx}>{detail}</li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-
-            {/* Entretien */}
-            <div className="border-b border-[#EAE0D5]">
-              <button 
-                onClick={() => setIsCareOpen(!isCareOpen)}
-                className="w-full py-4 flex items-center justify-between text-left text-gray-900 font-medium hover:text-[#7B5C46] transition-colors"
-              >
-                Conseils d'entretien
-                {isCareOpen ? <ChevronUp className="w-5 h-5" /> : <ChevronDown className="w-5 h-5" />}
-              </button>
-              <div className={`overflow-hidden transition-all duration-300 ${isCareOpen ? 'max-h-48 pb-4' : 'max-h-0'}`}>
-                <p className="text-sm text-gray-600 font-light leading-relaxed">
-                  Pour préserver l'éclat de votre bijou, évitez le contact avec le parfum et les produits cosmétiques. Rangez-le dans son pochon Arilona lorsque vous ne le portez pas.
-                </p>
-              </div>
-            </div>
-          </div>
-
-        </div>
-      </main>
-
-      {/* --- SECTION PRODUITS SIMILAIRES --- */}
-      <section className="bg-[#FAF6F0] py-16">
-        <div className="max-w-7xl mx-auto px-4">
-          <h2 className="text-3xl font-serif text-[#7B5C46] text-center mb-10">Vous aimerez aussi</h2>
-          
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-8">
-            {RELATED_PRODUCTS.map(product => (
-              <div key={product.id} className="group cursor-pointer flex flex-col">
-                <div className="relative overflow-hidden bg-white rounded-xl aspect-[4/5] mb-4">
-                  <img 
-                    src={product.img} 
-                    alt={product.name} 
-                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                  />
-                </div>
-                <div className="flex flex-col text-center">
-                  <h3 className="text-sm md:text-base font-medium text-gray-900 mb-1 line-clamp-1">{product.name}</h3>
-                  <p className="text-[#7B5C46] font-serif text-sm md:text-base">{product.price} F</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+      </div>
 
     </div>
-  );
+
+    {/* --- INFOS PRODUIT --- */}
+    <div className='flex-1'>
+      <h1 className='font-serif text-3xl md:text-4xl text-stone-800 tracking-tight'>{produitData.name}</h1>
+      
+      {/* Avis */}
+      <div className='flex items-center gap-1 mt-3'>
+        {[...Array(4)].map((_, i) => (
+          <Star key={i} className='w-4 h-4 fill-amber-500 text-amber-500' />
+        ))}
+        <Star className='w-4 h-4 text-stone-300' />
+        <p className='pl-2 text-sm text-stone-500 font-medium'>(12 avis clients)</p>
+      </div>
+
+      <p className='mt-6 text-3xl font-light text-amber-900'>
+        {produitData.price.toLocaleString()} {monnaie}
+      </p>
+      
+      <p className='mt-6 text-stone-600 leading-relaxed font-alice text-lg md:w-11/12'>
+        {produitData.description}
+      </p>
+
+      {/* Sélection de Taille */}
+      <div className='flex flex-col gap-4 my-10'>
+          <p className='font-medium text-stone-800'>Sélectionner une taille :</p>
+          <div className='flex flex-wrap gap-3'>
+            {produitData.size.map((item, index) => (
+              <button 
+                key={index} 
+                onClick={() => setSize(item)}
+                className={`min-w-[3rem] h-12 flex items-center justify-center border-2 transition-all duration-200 font-medium
+                  ${item === size 
+                    ? 'border-amber-800 bg-amber-900 text-white shadow-md' 
+                    : 'border-stone-200 bg-white text-stone-600 hover:border-amber-400'}`}
+              >
+                {item}
+              </button>
+            ))}
+          </div>
+      </div>
+      
+      {/* Bouton d'action */}
+      <button 
+        onClick={() => ajouterPanier(produitData._id, size)} 
+        className='w-full md:w-auto mt-2 bg-stone-900 text-white px-12 py-4 text-sm font-bold tracking-[0.2em] hover:bg-amber-950 active:bg-stone-700 transition-all rounded-sm shadow-lg'
+      >
+        AJOUTER AU PANIER
+      </button>
+
+      <hr className='mt-10 border-stone-200 md:w-11/12'/>
+      
+      <div className='text-xs sm:text-sm text-stone-500 mt-6 flex flex-col gap-2 font-medium'>
+        <div className='flex items-center gap-2 italic'>
+          <span className='w-1 h-1 bg-amber-600 rounded-full'></span>
+          <p>100% Satisfaction Garantie</p>
+        </div>
+        <div className='flex items-center gap-2 italic'>
+          <span className='w-1 h-1 bg-amber-600 rounded-full'></span>
+          <p>Livraison Gratuite à partir de 150 000 FCFA</p>
+        </div>
+        <div className='flex items-center gap-2 italic'>
+          <span className='w-1 h-1 bg-amber-600 rounded-full'></span>
+          <p>Échange et retour sous 30 jours</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {/* --- SECTION DESCRIPTION & REVIEWS --- */}
+  <div className='mt-24 px-4 md:px-10 lg:px-20'>
+    <div className='flex'>
+      <button className='border-b-2 border-stone-900 px-8 py-4 text-sm font-bold'>Description</button>
+      <button className='border-b-2 border-transparent text-stone-400 px-8 py-4 text-sm hover:text-stone-600 transition-all'>Avis (122)</button>
+    </div>
+    <div className='flex flex-col gap-6 border border-stone-100 px-8 py-10 text-sm md:text-base text-stone-600 leading-loose bg-stone-50/30'>
+      <p>{produitData.fullDescription || "Détails raffinés et finitions artisanales caractérisent cette pièce unique de notre collection Arilona."}</p>
+      <p>Chaque pièce est soigneusement sélectionnée pour garantir une brillance durable et un confort optimal au quotidien.</p>
+    </div>
+  </div>
+
+  {/* Produits Similaires */}
+  <div className='mt-20'>
+    <ApparenteProduit />
+  </div>
+</div>
+  ): <div className='opacity-0'></div>
 }
 
-// --- DONNÉES SIMULÉES DU PRODUIT ---
-const PRODUCT = {
-  id: 2,
-  name: "Collier Minimaliste Goutte",
-  category: "Colliers",
-  material: "Acier Inoxydable",
-  price: 45,
-  description: "D'une élégance rare, ce collier met en valeur une délicate goutte polie. Conçu pour épouser parfaitement la ligne de votre cou, il capte la lumière à chaque mouvement. Un bijou intemporel qui se porte aussi bien en journée qu'en soirée.",
-  details: [
-    "Longueur de la chaîne : 40 cm + 5 cm d'extension",
-    "Taille du pendentif : 1.2 cm",
-    "Résistant à l'eau et hypoallergénique",
-    "Livré dans son écrin signature Arilona"
-  ],
-  images: [
-    "https://images.unsplash.com/photo-1599643478514-4a11011c289e?auto=format&fit=crop&q=80&w=800",
-    "https://images.unsplash.com/photo-1611591437281-460bfbe1220a?auto=format&fit=crop&q=80&w=800",
-    "https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?auto=format&fit=crop&q=80&w=800"
-  ]
-};
-
-// --- AUTRES PRODUITS (Pour la section "Vous aimerez aussi") ---
-const RELATED_PRODUCTS = [
-  { id: 3, name: "Boucles d'oreilles Célestes", material: "Argent", price: 85, img: "https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?auto=format&fit=crop&q=80&w=600" },
-  { id: 4, name: "Bracelet Jonc Torsadé", material: "Acier Inoxydable", price: 55, img: "https://images.unsplash.com/photo-1611591437281-460bfbe1220a?auto=format&fit=crop&q=80&w=600" },
-  { id: 1, name: "Bague Éternité Or", material: "Acier", price: 120, img: "https://images.unsplash.com/photo-1605100804763-247f67b6348e?auto=format&fit=crop&q=80&w=600" },
-];
-
+export default PageProduit

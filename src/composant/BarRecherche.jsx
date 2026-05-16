@@ -14,7 +14,7 @@ import { useLocation } from 'react-router-dom';
 
   return (
     <div className={`flex items-center justify-center ${isNavbar ? 'w-full mx-10' : 'w-full py-5 bg-white border-b'}`}>
-      <div className={`inline-flex items-center border-2 border-amber-700 border-dashed rounded-full overflow-hidden bg-white ${isNavbar ? 'w-full max-w-md' : 'w-[90%]'}`}>
+      <div className={`inline-flex items-center border-2 border-amber-700 border-dashed rounded-full overflow-hidden bg-white ${isNavbar ? 'w-full max-w-md' : 'w-[70%]'}`}>
         <input
           type="text"
           className='flex-1 px-4 py-2 outline-none bg-transparent text-sm'

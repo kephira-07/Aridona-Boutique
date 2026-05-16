@@ -148,7 +148,7 @@ const Collection = () => {
       {/* Grille : 2 colonnes sur mobile, 3 sur tablette, 4/5 sur desktop */}
       <div className='grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-1 gap-y-8'>
         {filtreProduits.map((item, index) => (
-          <ProduitItem key={index} name={item.name} price={item.price} img={item.img} />
+          <ProduitItem key={index} name={item.name} price={item.price} id={item._id} img={item.img[0]} />
         ))}
       </div>
     </div>

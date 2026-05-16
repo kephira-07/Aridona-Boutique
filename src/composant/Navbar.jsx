@@ -16,7 +16,7 @@ export default function Navbar() {
   
   const [isScrolled, setIsScrolled] = useState(false);
   const [Visible, setVisible] = useState(false);
-  const {setMontreRecherche}=useContext(ShopContext);
+  const {setMontreRecherche,obtenirPanierCount}=useContext(ShopContext);
   
 
   // Gestion du scroll ultra-légère
@@ -110,7 +110,7 @@ export default function Navbar() {
                     <Link to="/panier">
                       <button className="text-gray-800 hover:text-amber-500 transition-colors relative">
                       <ShoppingCart className="w-6 h-6" />
-                      <span className="absolute -top-1 -right-2 w-4 h-4 bg-amber-500 text-white text-[10px] flex items-center justify-center rounded-full font-bold">2</span>
+                      <span className="absolute -top-1 -right-2 w-4 h-4 bg-amber-500 text-white text-[10px] flex items-center justify-center rounded-full font-bold">{obtenirPanierCount()}</span>
                     </button>
                     </Link>
                   </div>
@@ -167,7 +167,7 @@ export default function Navbar() {
                     <Link to="/panier" className=" text-black hover:bg-gray-100 rounded-full relative ">
                       <ShoppingCart className="w-5 h-5" />
                       <span className="absolute  right-[-10px] bottom-3 w-4 h-4 bg-amber-500 text-white text-[10px] flex items-center justify-center rounded-full font-bold">
-                        2
+                        {obtenirPanierCount()}
                       </span>
                     </Link>
                   </div>
