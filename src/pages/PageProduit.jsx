@@ -2,7 +2,7 @@ import { useContext,useEffect,useState } from 'react'
 import React  from 'react'
 import { useParams } from 'react-router-dom'
 import {ShopContext} from '../context/ShopContext'
-import { Star } from 'lucide-react'
+import { Star ,X} from 'lucide-react'
 import ApparenteProduit from '../composant/ApparenteProduit'
 
 const PageProduit = () => {
@@ -12,6 +12,7 @@ const PageProduit = () => {
   const [image,setImage]=useState('');
  
   const [size,setSize]=useState('');
+  const [showModal, setShowModal] = useState(false);
 
   const fetchProduitData= async ()=>{
     produits.map((item)=>{
@@ -53,15 +54,49 @@ const PageProduit = () => {
       </div>
 
       {/* Image Principale */}
-      <div className='w-full md:w-[80%]'>
-        <div className='aspect-square w-full overflow-hidden rounded-xl bg-stone-50 border border-stone-100'>
-          <img 
-            src={image} 
-            alt={produitData.name} 
-            className='w-full h-full object-cover transition-transform duration-500 hover:scale-105'
-          />
-        </div>
-      </div>
+   {/* --- Image Principale avec clic pour agrandir --- */}
+<div className='w-full md:w-[80%]'>
+  <div 
+    onClick={() => setShowModal(true)} // Ouvre la modal au clic
+    className='aspect-square w-full overflow-hidden rounded-xl bg-stone-50 border border-stone-100 cursor-zoom-in group relative'
+  >
+    <img 
+      src={image} 
+      alt={produitData.name} 
+      className='w-full h-full object-cover transition-transform duration-500 group-hover:scale-105'
+    />
+    {/* Petit indicateur visuel au survol */}
+    <div className='absolute inset-0 bg-black/5 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center'>
+       <span className='bg-white/80 px-4 py-2 rounded-full text-xs font-medium text-stone-800 backdrop-blur-sm'>
+         Cliquez pour agrandir
+       </span>
+    </div>
+  </div>
+</div>
+
+{/* --- MODAL PLEIN ÉCRAN (À placer juste avant la fermeture de la div principale) --- */}
+{showModal && (
+  <div 
+    className="fixed inset-0 z-[1000] bg-black/90 flex items-center justify-center p-4 md:p-10 transition-all duration-300"
+    onClick={() => setShowModal(false)} // Ferme la modal en cliquant n'importe où
+  >
+    {/* Bouton Fermer */}
+    <button 
+      className="absolute top-5 right-5 text-white hover:text-amber-500 transition-colors"
+      onClick={() => setShowModal(false)}
+    >
+      <X size={40} strokeWidth={1.5} />
+    </button>
+
+    {/* Image en taille réelle */}
+    <img 
+      src={image} 
+      alt="Plein écran" 
+      className="max-w-full max-h-full object-contain shadow-2xl animate-in zoom-in-95 duration-300"
+      onClick={(e) => e.stopPropagation()} // Empêche la fermeture si on clique sur l'image elle-même
+    />
+  </div>
+)}
 
     </div>
 
