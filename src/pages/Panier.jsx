@@ -29,7 +29,7 @@ const Panier = () => {
   }, [panierProduits]);
 
   return (
-    <div className='border-t pt-14 mt-20'> 
+    <div className='border-t pt-14 px-5 mt-20'> 
       
       <div className='text-2xl mb-6'>
         <Titre text1={'Votre'} text2={'Panier'} />

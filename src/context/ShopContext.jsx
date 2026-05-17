@@ -36,29 +36,41 @@ const ShopContextProvider = (props) => {
     setPanierProduits(panierData)
     
   }
-   const getPanierCount=()=>{
-     let totalCount=0;
-     for(const items in panierProduits){
-      for(const item in panierProduits[items]){
-        try {
-          if (panierProduits[items][item]>0) {
-            totalCount += panierProduits[items][item];
-          }
-          
-        } catch (error) {
-          
+const getPanierCount = () => {
+  let totalCount = 0;
+  for (const items in panierProduits) {
+    for (const item in panierProduits[items]) {
+      try {
+        // On s'assure que la valeur est bien un nombre avant d'additionner
+        if (panierProduits[items][item] > 0) {
+          totalCount += panierProduits[items][item];
         }
+      } catch (error) {
+        // Si il y a un problème (ex: item est undefined), on le voit direct en rouge dans la console
+        console.error("Erreur lors du calcul du panier pour l'id:", items, error);
       }
-      
-     }
-     return totalCount;
-   }
+    }
+  }
+  return totalCount;
+}
  const updateQuantity= async (produitId,size,quantity)=>{
   let panierData = structuredClone(panierProduits);
   panierData[produitId][size]=quantity;
   setPanierProduits(panierData);
 
  }
+
+ // 4. ON AJOUTE LE TOAST DE SUCCÈS ICI
+    toast.success('Article ajouté au panier !', {
+      position: "bottom-right", // Position élégante
+      autoClose: 2000,          // Se ferme après 2 secondes
+      hideProgressBar: true,
+      closeOnClick: true,
+      pauseOnHover: false,
+      draggable: true,
+      theme: "dark",            // "dark" ou "light" selon ton design Arilona
+    });
+  }
 
  const getPanierMontant =  () => {
   let totalMontant = 0;
