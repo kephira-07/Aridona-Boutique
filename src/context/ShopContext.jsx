@@ -33,8 +33,16 @@ const ShopContextProvider = (props) => {
       panierData[produitId]={};
       panierData[produitId][size] =1
     }
-    setPanierProduits(panierData)
-    
+    setPanierProduits(panierData);// 4. ON AJOUTE LE TOAST DE SUCCÈS ICI
+    toast.success('Article ajouté au panier !', {
+      position: "bottom-right", // Position élégante
+      autoClose: 2000,          // Se ferme après 2 secondes
+      hideProgressBar: true,
+      closeOnClick: true,
+      pauseOnHover: false,
+      draggable: true,
+      theme: "dark",            // "dark" ou "light" selon ton design Arilona
+    });
   }
 const getPanierCount = () => {
   let totalCount = 0;
@@ -60,17 +68,7 @@ const getPanierCount = () => {
 
  }
 
- // 4. ON AJOUTE LE TOAST DE SUCCÈS ICI
-    toast.success('Article ajouté au panier !', {
-      position: "bottom-right", // Position élégante
-      autoClose: 2000,          // Se ferme après 2 secondes
-      hideProgressBar: true,
-      closeOnClick: true,
-      pauseOnHover: false,
-      draggable: true,
-      theme: "dark",            // "dark" ou "light" selon ton design Arilona
-    });
-  }
+ 
 
  const getPanierMontant =  () => {
   let totalMontant = 0;

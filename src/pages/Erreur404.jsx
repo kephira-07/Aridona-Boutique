@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 const Erreur404 = () => {
   return (
-    <div className='min-h-[70vh] flex flex-col items-center justify-center text-center px-4'>
+    <div className='min-h-[70vh] flex flex-col items-center justify-center text-center px-4 mt-10'>
       {/* Le chiffre 404 avec un style épuré */}
       <h1 className='text-9xl font-serif text-gray-200 tracking-tighter'>
         404
