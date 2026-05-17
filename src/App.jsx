@@ -13,6 +13,8 @@ import Panier from './pages/Panier'
 import PasserCommande from './pages/PasserCommande'
 
 import Erreur404 from './pages/Erreur404'
+import { Scroll } from 'lucide-react'
+import ScrollToTop from './composant/ScrollToTop'
 
 
 function App() {
@@ -20,6 +22,7 @@ function App() {
 
   return (
     <>
+      <ScrollToTop/>
        <ToastContainer />
      <Navbar/>
   <div className="md:hidden mt-20"> 

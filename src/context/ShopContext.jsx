@@ -35,7 +35,7 @@ const ShopContextProvider = (props) => {
     }
     setPanierProduits(panierData);// 4. ON AJOUTE LE TOAST DE SUCCÈS ICI
     toast.success('Article ajouté au panier !', {
-      position: "bottom-right", // Position élégante
+      position: "top-right", // Position élégante
       autoClose: 2000,          // Se ferme après 2 secondes
       hideProgressBar: true,
       closeOnClick: true,
