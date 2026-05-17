@@ -9,6 +9,8 @@ import BarRecherche from './composant/BarRecherche'
 import Footer from './composant/Footer'
 import PageProduit from './pages/PageProduit'
   import { ToastContainer, toast } from 'react-toastify';
+import Panier from './pages/Panier'
+import PasserCommande from './pages/PasserCommande'
 
 
 function App() {
@@ -32,6 +34,8 @@ function App() {
      
         <Route path='/boutique' element={<Boutique />} />
         <Route path='/produit/:produitId' element={<PageProduit />} />  
+        <Route path='/panier' element={<Panier/>}></Route>
+        <Route path='/passer-commande' element={<PasserCommande/>}></Route>
 
       </Routes>
       <Footer/>

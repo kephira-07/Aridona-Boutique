@@ -1,6 +1,6 @@
-import{ createContext, useEffect, useState } from 'react';
+import{ createContext, useState,useNavigate } from 'react';
 import { produits } from '../assets/image';
-  import { ToastContainer, toast } from 'react-toastify';
+  import { toast } from 'react-toastify';
 
 // 1. On crée et on exporte le contexte
 export const ShopContext = createContext();
@@ -8,10 +8,11 @@ export const ShopContext = createContext();
 // 2. On crée le Provider
 const ShopContextProvider = (props) => {
   const monnaie = 'FCFA';
-  const delivery_free = 10;
+  const delivery_free = 500;
   const [recherche,setRecherche]=useState('');
   const [montreRecherche,setMontreRecherche]=useState(false)
-  const [panierProduit,setPanierProduit]=useState({});
+  const [panierProduits,setPanierProduits]=useState({});
+ 
 
 
   const ajouterPanier = async(produitId,size)=>{
@@ -20,7 +21,7 @@ const ShopContextProvider = (props) => {
       toast.error('Veuillez selectionner une taille')
       return;
     }
-    let panierData = structuredClone(panierProduit);
+    let panierData = structuredClone(panierProduits);
     if(panierData[produitId]){
       if (panierData[produitId][size]) {
        panierData[produitId][size]+=1
@@ -32,16 +33,16 @@ const ShopContextProvider = (props) => {
       panierData[produitId]={};
       panierData[produitId][size] =1
     }
-    setPanierProduit(panierData)
+    setPanierProduits(panierData)
     
   }
-   const obtenirPanierCount=()=>{
+   const getPanierCount=()=>{
      let totalCount=0;
-     for(const produits in panierProduit){
-      for(const produit in panierProduit[produits]){
+     for(const items in panierProduits){
+      for(const item in panierProduits[items]){
         try {
-          if (panierProduit[produits][produit]>0) {
-            totalCount += panierProduit[produits][produit];
+          if (panierProduits[items][item]>0) {
+            totalCount += panierProduits[items][item];
           }
           
         } catch (error) {
@@ -52,12 +53,32 @@ const ShopContextProvider = (props) => {
      }
      return totalCount;
    }
+ const updateQuantity= async (produitId,size,quantity)=>{
+  let panierData = structuredClone(panierProduits);
+  panierData[produitId][size]=quantity;
+  setPanierProduits(panierData);
 
+ }
+
+ const getPanierMontant =  () => {
+  let totalMontant = 0;
+  for (const items in panierProduits) {
+    let itemInfo = produits.find((produit) => produit._id === items);
+    for (const item in panierProduits[items]) {
+      try {
+        if (panierProduits[items][item] > 0) {
+          totalMontant += itemInfo.price * panierProduits[items][item];
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  }
+  return totalMontant;
+};
 
   const value = {
-    produits,
-    monnaie,
-    delivery_free,recherche,setRecherche,montreRecherche,setMontreRecherche,panierProduit,ajouterPanier,obtenirPanierCount
+    produits,monnaie,delivery_free,recherche,setRecherche,montreRecherche,setMontreRecherche,panierProduits,ajouterPanier,getPanierCount,updateQuantity,getPanierMontant
   };
 
   return (

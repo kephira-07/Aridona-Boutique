@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom'
 import {ShopContext} from '../context/ShopContext'
 import { Star ,X} from 'lucide-react'
 import ApparenteProduit from '../composant/ApparenteProduit'
+import Boutton from '../composant/Boutton'
 
 const PageProduit = () => {
   const {produitId}=useParams();
@@ -143,9 +144,9 @@ const PageProduit = () => {
       {/* Bouton d'action */}
       <button 
         onClick={() => ajouterPanier(produitData._id, size)} 
-        className='w-full md:w-auto mt-2 bg-stone-900 text-white px-12 py-4 text-sm font-bold tracking-[0.2em] hover:bg-amber-950 active:bg-stone-700 transition-all rounded-sm shadow-lg'
+        className=''
       >
-        AJOUTER AU PANIER
+       <Boutton textb=' AJOUTER AU PANIER' />
       </button>
 
       <hr className='mt-10 border-stone-200 md:w-11/12'/>
