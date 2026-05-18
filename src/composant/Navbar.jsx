@@ -17,6 +17,7 @@ export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [Visible, setVisible] = useState(false);
   const {setMontreRecherche,getPanierCount}=useContext(ShopContext);
+   const [montreProfilmenu,setMontreProfilmenu]= useState(false);
   
 
   // Gestion du scroll ultra-légère
@@ -139,82 +140,83 @@ export default function Navbar() {
 
        
           {/* VERSION MOBILE (Cachée sur PC) */}
-<div className="md:hidden">
-  <div className={`flex items-center h-16 justify-between border-b-2 border-dashed border-amber-700 px-6 transition-all duration-300 ${
-    isScrolled ? 'bg-white/90 backdrop-blur-md shadow-sm' : 'bg-white'
-  }`}>
+              <div className="md:hidden  ">
+                <div className={`flex items-center h-15 justify-between border-b-2 border-amber-700  px-10 ${
+          isScrolled ? '  bg-white/65  backdrop-blur-md shadow-sm' : 'bg-white  '
+        }`} >
+                  
+                  {/* 1. Menu Burger (Gauche) */}
+                  <button 
+                    className=" text-black hover:bg-gray-100 rounded-full transition-colors"
+                    onClick={() => setVisible(true)}
+                  >
+                    <Menu className="w-6 h-6" />
+                  </button>
+
+                  {/* 2. Logo (Centré) */}
+                  <div >
+                    <Link to='/'>
+                      <img 
+                        src={logo2} 
+                        alt="Logo" 
+                        className="h-40 w-auto object-contain" 
+                      />
+                    </Link>
+                  </div>
+
+                  {/* 3. Icônes Actions (Droite) */}
+                  <div className="flex items-center gap-4">
+                    {/* Recherche */}
+                    <button 
+                      onClick={() => setMontreRecherche(true)}
+                      className=" text-black hover:bg-gray-100 rounded-full"
+                    >
+                      <Search className="w-5 h-5" />
+                    </button>
+
+                  <div className='relative'>
+                       {/* Profil */}
+                    <button   onClick={() => setMontreProfilmenu(!montreProfilmenu)} className=" text-black hover:bg-gray-100 rounded-full">
+                      <User className="w-5 h-5" />
+
+
+                    </button>
+                    {montreProfilmenu && (
+                     <div className='group-hover:block hidden absolute right-0 pt-4 z-50'>
+                        <div className='w-48 bg-white border-2 border-dashed border-amber-600 shadow-2xl rounded-sm p-2'>
+                          <div className='flex flex-col'>
+                            <Link to='/mon-compte' className='group/item relative px-4 py-3 text-[10px] tracking-[0.2em] text-gray-700 uppercase'>
+                              Mon Compte
+                              <span className='absolute bottom-2 left-4 w-0 h-[1px] bg-amber-600 transition-all duration-300 group-hover/item:w-10'></span>
+                            </Link>
+                            <Link to='/commandes' className='group/item relative px-4 py-3 text-[10px] tracking-[0.2em] text-gray-700 uppercase'>
+                              Mes Commandes
+                              <span className='absolute bottom-2 left-4 w-0 h-[1px] bg-amber-600 transition-all duration-300 group-hover/item:w-10'></span>
+                            </Link>
+                            <button className='group/item relative px-4 py-3 text-[10px] tracking-[0.2em] text-red-700 uppercase text-left'>
+                              Déconnexion
+                              <span className='absolute bottom-2 left-4 w-0 h-[1px] bg-red-700 transition-all duration-300 group-hover/item:w-5'></span>
+                            </button>
+                          </div>
+                        </div>
+                      </div>)}
+
+                  </div>
+                      <button className=" text-black hover:bg-gray-100 rounded-full">
+                      <Heart className="w-5 h-5" />
+                    </button>
+
+                    {/* Panier avec Badge */}
+                    <Link to="/panier" className=" text-black hover:bg-gray-100 rounded-full relative ">
+                      <ShoppingCart className="w-5 h-5" />
+                      <span className="absolute  right-[-10px] bottom-3 w-4 h-4 bg-amber-500 text-white text-[10px] flex items-center justify-center rounded-full font-bold">
+                        {getPanierCount()}
+                      </span>
+                    </Link>
+                  </div>
+                </div>
+              </div>
     
-    {/* 1. Menu Burger (Gauche) */}
-    <button 
-      className="p-2 text-black active:bg-gray-100 rounded-full transition-colors"
-      onClick={() => setVisible(true)}
-    >
-      <Menu className="w-6 h-6 stroke-[1.5]" />
-    </button>
-
-    {/* 2. Logo (Centré) - Ajusté car h-40 est très grand pour mobile */}
-    <div className="flex-grow flex justify-center">
-      <Link to='/'>
-        <img 
-          src={logo2} 
-          alt="Logo" 
-          className="h-30 w-auto object-contain" 
-        />
-      </Link>
-    </div>
-
-    {/* 3. Icônes Actions (Droite) */}
-    <div className="flex items-center gap-2">
-      {/* Recherche */}
-      <button 
-        onClick={() => setMontreRecherche(true)}
-        className="p-2 text-black active:bg-gray-100 rounded-full"
-      >
-        <Search className="w-5 h-5 stroke-[1.5]" />
-      </button>
-
-      {/* Profil avec Dropdown "PC Style" */}
-      <div className='group relative'>
-        <button className="p-2 text-black active:bg-gray-100 rounded-full">
-          <User className="w-5 h-5 stroke-[1.5]" />
-        </button>
-        
-        {/* Menu Déroulant Mobile Style PC */}
-        <div className='group-hover:block hidden absolute right-0 pt-4 z-50'>
-          <div className='w-48 bg-white border-2 border-dashed border-amber-600 shadow-2xl rounded-sm p-2'>
-            <div className='flex flex-col'>
-              <Link to='/mon-compte' className='group/item relative px-4 py-3 text-[10px] tracking-[0.2em] text-gray-700 uppercase'>
-                Mon Compte
-                <span className='absolute bottom-2 left-4 w-0 h-[1px] bg-amber-600 transition-all duration-300 group-hover/item:w-10'></span>
-              </Link>
-              <Link to='/commandes' className='group/item relative px-4 py-3 text-[10px] tracking-[0.2em] text-gray-700 uppercase'>
-                Mes Commandes
-                <span className='absolute bottom-2 left-4 w-0 h-[1px] bg-amber-600 transition-all duration-300 group-hover/item:w-10'></span>
-              </Link>
-              <button className='group/item relative px-4 py-3 text-[10px] tracking-[0.2em] text-red-700 uppercase text-left'>
-                Déconnexion
-                <span className='absolute bottom-2 left-4 w-0 h-[1px] bg-red-700 transition-all duration-300 group-hover/item:w-5'></span>
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Favoris */}
-      <button className="p-2 text-black active:bg-gray-100 rounded-full">
-        <Heart className="w-5 h-5 stroke-[1.5]" />
-      </button>
-
-      {/* Panier avec Badge */}
-      <Link to="/panier" className="p-2 text-black active:bg-gray-100 rounded-full relative">
-        <ShoppingCart className="w-5 h-5 stroke-[1.5]" />
-        <span className="absolute right-0 top-1 w-4 h-4 bg-amber-600 text-white text-[9px] flex items-center justify-center rounded-full font-bold shadow-sm">
-          {getPanierCount()}
-        </span>
-      </Link>
-    </div>
-  </div>
-</div>
         
        
       </header>
