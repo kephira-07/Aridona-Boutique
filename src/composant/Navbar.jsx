@@ -182,24 +182,72 @@ export default function Navbar() {
 
                     </button>
                     {montreProfilmenu && (
-                     <div className='group-hover:block hidden absolute right-0 pt-4 z-50'>
-                        <div className='w-48 bg-white border-2 border-dashed border-amber-600 shadow-2xl rounded-sm p-2'>
-                          <div className='flex flex-col'>
-                            <Link to='/mon-compte' className='group/item relative px-4 py-3 text-[10px] tracking-[0.2em] text-gray-700 uppercase'>
-                              Mon Compte
-                              <span className='absolute bottom-2 left-4 w-0 h-[1px] bg-amber-600 transition-all duration-300 group-hover/item:w-10'></span>
-                            </Link>
-                            <Link to='/commandes' className='group/item relative px-4 py-3 text-[10px] tracking-[0.2em] text-gray-700 uppercase'>
-                              Mes Commandes
-                              <span className='absolute bottom-2 left-4 w-0 h-[1px] bg-amber-600 transition-all duration-300 group-hover/item:w-10'></span>
-                            </Link>
-                            <button className='group/item relative px-4 py-3 text-[10px] tracking-[0.2em] text-red-700 uppercase text-left'>
-                              Déconnexion
-                              <span className='absolute bottom-2 left-4 w-0 h-[1px] bg-red-700 transition-all duration-300 group-hover/item:w-5'></span>
-                            </button>
-                          </div>
-                        </div>
-                      </div>)}
+                     <div className='absolute right-0 pt-4 z-50'>
+                              {/* Conteneur Principal avec ombre portée luxueuse */}
+                              <div 
+                                className='w-64 bg-white shadow-[0_20px_50px_rgba(0,0,0,0.1)] rounded-lg overflow-hidden' 
+                                onClick={() => setMontreProfilmenu(false)}
+                              >
+                                <div className='flex flex-col p-2'>
+                                  
+                                  {/* Bouton : Mon Compte */}
+                                  <Link 
+                                    to='/login' 
+                                    className='group relative flex items-center px-4 py-5 transition-all duration-300 active:scale-95 hover:bg-amber-50/30'
+                                  >
+                                    <div className="flex flex-col">
+                                      <span className='font-alice text-[15px] tracking-widest text-gray-800 capitalize'>
+                                        Mon Compte
+                                      </span>
+                                      {/* Ligne d'animation Alice Style */}
+                                      <span className='w-0 h-[1px] bg-amber-600 transition-all duration-500 group-hover:w-full mt-1'></span>
+                                    </div>
+                                    <span className='ml-auto opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all duration-300 text-amber-600'>
+                                      →
+                                    </span>
+                                  </Link>
+
+                                  {/* BARRE DE SÉPARATION 1 */}
+                                  <div className="h-[1px] w-[90%] mx-auto bg-gradient-to-r from-transparent via-gray-200 to-transparent"></div>
+
+                                  {/* Bouton : Mes Commandes */}
+                                  <Link 
+                                    to='/commandes' 
+                                    className='group relative flex items-center px-4 py-5 transition-all duration-300 active:scale-95 hover:bg-amber-50/30'
+                                  >
+                                    <div className="flex flex-col">
+                                      <span className='font-alice text-[15px] tracking-widest text-gray-800 capitalize'>
+                                        Mes Commandes
+                                      </span>
+                                      <span className='w-0 h-[1px] bg-amber-600 transition-all duration-500 group-hover:w-full mt-1'></span>
+                                    </div>
+                                    <span className='ml-auto opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all duration-300 text-amber-600'>
+                                      →
+                                    </span>
+                                  </Link>
+
+                                  {/* BARRE DE SÉPARATION 2 */}
+                                  <div className="h-[1px] w-[90%] mx-auto bg-gradient-to-r from-transparent via-gray-200 to-transparent"></div>
+
+                                  {/* Bouton : Déconnexion */}
+                                  <button 
+                                    className='group relative flex items-center px-4 py-5 transition-all duration-300 active:scale-95 hover:bg-red-50/20 text-left'
+                                  >
+                                    <div className="flex flex-col">
+                                      <span className='font-alice text-[15px] tracking-widest text-red-800 capitalize'>
+                                        Déconnexion
+                                      </span>
+                                      <span className='w-0 h-[1px] bg-red-800 transition-all duration-500 group-hover:w-1/2 mt-1'></span>
+                                    </div>
+                                    <span className='ml-auto opacity-0 group-hover:opacity-100 transition-all duration-300 text-red-700'>
+                                      ✕
+                                    </span>
+                                  </button>
+
+                                </div>
+                              </div>
+                            </div>
+                     )}
 
                   </div>
                       <button className=" text-black hover:bg-gray-100 rounded-full">
