@@ -101,7 +101,7 @@ export default function Navbar() {
                                 <div className='flex flex-col'>
                                   
                                   {/* Lien avec animation Underline */}
-                                  <Link to='/profil' className='group/item relative px-4 py-3 text-[11px] tracking-[0.2em] text-gray-700 uppercase transition-colors hover:text-amber-700'>
+                                  <Link to='/login' className='group/item relative px-4 py-3 text-[11px] tracking-[0.2em] text-gray-700 uppercase transition-colors hover:text-amber-700'>
                                     Mon Compte
                                     {/* Le trait qui s'anime au survol */}
                                     <span className='absolute bottom-2 left-4 w-0 h-[1px] bg-amber-600 transition-all duration-300 group-hover/item:w-10'></span>

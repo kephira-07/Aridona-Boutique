@@ -15,6 +15,7 @@ import PasserCommande from './pages/PasserCommande'
 import Erreur404 from './pages/Erreur404'
 import { Scroll } from 'lucide-react'
 import ScrollToTop from './composant/ScrollToTop'
+import Login from './pages/Login'
 
 
 function App() {
@@ -39,8 +40,9 @@ function App() {
      
         <Route path='/boutique' element={<Boutique />} />
         <Route path='/produit/:produitId' element={<PageProduit />} />  
-        <Route path='/panier' element={<Panier/>}></Route>
-        <Route path='/passer-commande' element={<PasserCommande/>}></Route>
+        <Route path='/panier' element={<Panier/>}/>
+        <Route path='/passer-commande' element={<PasserCommande/>}/>
+        <Route path='/login' element={<Login />} />
          <Route path='*' element={<Erreur404 />} />
       </Routes>
       <Footer/>

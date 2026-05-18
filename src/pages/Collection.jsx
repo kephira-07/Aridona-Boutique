@@ -32,59 +32,44 @@ const Collection = () => {
     };
   
      
-    const appliquerFiltre=() =>{
-        let copieproduit= produits.slice();
-        if (categorie.length > 0) {
-            copieproduit = copieproduit.filter(item => categorie.includes(item.category));
-            
-        }
-        if (montreRecherche && recherche) {
-            copieproduit=copieproduit.filter(item=> item.name.toLowerCase().includes(recherche.toLowerCase())) 
-        }
-        if (matiere.length > 0) {
-            copieproduit=copieproduit.filter(item=> matiere.includes(item.material))
-            
-        }
-        setFiltreProduits(copieproduit)
+// Collection.js – extrait modifié
+const appliquerFiltre = () => {
+  let copieproduit = produits.slice();
+  if (categorie.length > 0) {
+    copieproduit = copieproduit.filter(item => categorie.includes(item.category));
+  }
+  if (montreRecherche && recherche) {
+    copieproduit = copieproduit.filter(item => item.name.toLowerCase().includes(recherche.toLowerCase()));
+  }
+  if (matiere.length > 0) {
+    copieproduit = copieproduit.filter(item => matiere.includes(item.material));
+  }
+  setFiltreProduits(copieproduit);
+};
 
-    }
-    const sortProduit=()=>{
-        let fpCopy=filtreProduits.slice()
-        switch(sortType){
-            case 'price-asc':
-                setFiltreProduits(fpCopy.sort((a,b)=>(a.price-b.price)));
-                break;
-            case 'price-desc':
-                setFiltreProduits(fpCopy.sort((a,b)=>(b.price-a.price)));
-                break;  
-            default:
-                appliquerFiltre();
-                break;      
-        }
+const sortProduit = () => {
+  let fpCopy = filtreProduits.slice();
+  switch (sortType) {
+    case 'price-asc':
+      setFiltreProduits(fpCopy.sort((a, b) => a.price - b.price));
+      break;
+    case 'price-desc':
+      setFiltreProduits(fpCopy.sort((a, b) => b.price - a.price));
+      break;
+    default:
+      // On ne réapplique pas les filtres, on remet juste la liste dans l'ordre initial
+      appliquerFiltre();
+      break;
+  }
+};
 
-    }
-   
-    
-    useEffect(() => {
-        // Ici tu peux filtrer selon categorie/matiere
-        let filtered = produits.filter(p => {
-            return (
-                (categorie.length === 0 || categorie.includes(p.category)) &&
-                (matiere.length === 0 || matiere.includes(p.material))
-            );
-        });
-        setFiltreProduits(filtered);
-    }, [categorie, matiere, produits]);
+useEffect(() => {
+  appliquerFiltre();
+}, [categorie, matiere, recherche, montreRecherche, produits]);
 
-    useEffect(()=>{
-        appliquerFiltre();
-
-    },[categorie,matiere,recherche,montreRecherche])
-
-    useEffect(()=>{
-      sortProduit()  
-
-    },[sortType])
+useEffect(() => {
+  sortProduit();
+}, [sortType]);
     return (
   <div>
   {/* En tete */}
