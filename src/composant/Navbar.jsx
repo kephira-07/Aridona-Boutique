@@ -268,6 +268,9 @@ export default function Navbar() {
         
        
       </header>
+      <div className="md:hidden fixed top-21 left-0 w-full z-40 transition-all duration-300">
+        <BarRecherche isNavbar={false} />
+      </div>
 
        
 
