@@ -32,18 +32,23 @@ const Collection = () => {
     };
   
      
-// Collection.js – extrait modifié
+
 const appliquerFiltre = () => {
   let copieproduit = produits.slice();
+
   if (categorie.length > 0) {
     copieproduit = copieproduit.filter(item => categorie.includes(item.category));
   }
-  if (montreRecherche && recherche) {
+  
+  // CORRECTION : On filtre dès qu'il y a du texte dans 'recherche', peu importe 'montreRecherche'
+  if (recherche.trim()) {
     copieproduit = copieproduit.filter(item => item.name.toLowerCase().includes(recherche.toLowerCase()));
   }
+
   if (matiere.length > 0) {
     copieproduit = copieproduit.filter(item => matiere.includes(item.material));
   }
+
   setFiltreProduits(copieproduit);
 };
 

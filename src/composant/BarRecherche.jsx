@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext, useMemo, useRef } from 'react';
 import { ShopContext } from '../context/ShopContext';
 import { Search, X } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 export default function BarRecherche({ isNavbar }) {
   const {
@@ -12,6 +12,7 @@ export default function BarRecherche({ isNavbar }) {
 
   const [showSuggestions, setShowSuggestions] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation(); // On récupère la route actuelle
   const inputRef = useRef(null);
 
   // Suggestions filtrées (max 5)
@@ -22,18 +23,34 @@ export default function BarRecherche({ isNavbar }) {
       .slice(0, 5);
   }, [recherche, produits]);
 
-  // Afficher / masquer les suggestions
+  // Si on tape du texte et qu'on n'est pas sur la page collection, on y va automatiquement
   useEffect(() => {
-    setShowSuggestions(recherche.trim().length > 0);
-  }, [recherche]);
+    if (recherche.trim().length > 0) {
+      setShowSuggestions(true);
+      if (location.pathname !== '/collection') {
+        navigate('/collection');
+      }
+    } else {
+      setShowSuggestions(false);
+    }
+  }, [recherche, location.pathname, navigate]);
 
   const handleSuggestionClick = (produit) => {
     setRecherche('');               // vide la recherche
     setShowSuggestions(false);      // ferme la liste
-    navigate(`/produit/${produit._id}`); // redirige vers la fiche (adapte la route si besoin)
+    setMontreRecherche(false);      // Ferme l'overlay mobile si ouvert
+    navigate(`/produit/${produit._id}`); 
   };
 
-  // Si on n'est pas dans la navbar et que l'overlay est caché, on n'affiche rien
+  const handleKeyPress = (e) => {
+    if (e.key === 'Entrée' || e.key === 'Enter') {
+      setShowSuggestions(false);
+      setMontreRecherche(false);
+      inputRef.current?.blur(); // Enlève le focus du clavier
+    }
+  };
+
+  // Si on est sur mobile (!isNavbar) et que l'overlay est masqué, on ne rend rien
   if (!isNavbar && !montreRecherche) return null;
 
   return (
@@ -43,39 +60,43 @@ export default function BarRecherche({ isNavbar }) {
           ref={inputRef}
           type="text"
           className="flex-1 px-4 py-2 outline-none bg-transparent text-sm"
-          placeholder="Rechercher..."
+          placeholder="Rechercher un bijou..."
           value={recherche}
           onChange={(e) => setRecherche(e.target.value)}
+          onKeyDown={handleKeyPress}
           onFocus={() => { if (suggestions.length > 0) setShowSuggestions(true); }}
-          onBlur={() => setTimeout(() => setShowSuggestions(false), 100)} // petit délai pour permettre le clic
+          onBlur={() => setTimeout(() => setShowSuggestions(false), 200)} // Augmenté à 200ms pour assurer le clic mobile
         />
-        <div className="bg-amber-700 w-10 h-10 flex items-center justify-center">
+        <div className="bg-amber-700 w-10 h-10 flex items-center justify-center cursor-pointer">
           <Search className="text-white w-5 h-5" />
         </div>
 
-        {/* Dropdown des suggestions */}
+        {/* Dropdown des suggestions miniatures */}
         {showSuggestions && suggestions.length > 0 && (
-          <ul className="absolute top-full left-0 w-full bg-white border border-gray-200 rounded-b-md shadow-lg z-50 max-h-60 overflow-y-auto">
+          <ul className="absolute top-[105%] left-0 w-full bg-white border border-gray-200 rounded-lg shadow-2xl z-[999] max-h-60 overflow-y-auto p-1">
             {suggestions.map(p => (
               <li
                 key={p._id}
-                className="flex items-center gap-3 px-3 py-2 hover:bg-gray-100 cursor-pointer transition-colors"
-                onMouseDown={(e) => e.preventDefault()} // empêche la perte de focus avant le clic
+                className="flex items-center gap-3 px-3 py-2 hover:bg-amber-50/50 rounded-md cursor-pointer transition-colors"
+                onMouseDown={(e) => e.preventDefault()} // Crucial : empêche le onBlur de fermer la liste avant le clic !
                 onClick={() => handleSuggestionClick(p)}
               >
                 <img
                   src={p.img[0]}
                   alt={p.name}
-                  className="w-8 h-8 object-cover rounded-full border"
+                  className="w-10 h-10 object-cover rounded-md border border-amber-700/20"
                 />
-                <span className="text-sm truncate">{p.name}</span>
+                <div className="flex flex-col min-w-0">
+                  <span className="text-sm font-medium text-gray-800 truncate">{p.name}</span>
+                  <span className="text-xs text-amber-700 font-semibold">{p.price} FCFA</span>
+                </div>
               </li>
             ))}
           </ul>
         )}
       </div>
 
-      {/* Bouton X uniquement en mode overlay (mobile) */}
+      {/* Bouton X de fermeture (Overlay Mobile) */}
       {!isNavbar && (
         <X
           onClick={() => {

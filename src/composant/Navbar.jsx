@@ -167,12 +167,9 @@ export default function Navbar() {
                   {/* 3. Icônes Actions (Droite) */}
                   <div className="flex items-center gap-4">
                     {/* Recherche */}
-                    <button 
-                      onClick={() => setMontreRecherche(true)}
-                      className=" text-black hover:bg-gray-100 rounded-full"
-                    >
-                      <Search className="w-5 h-5" />
-                    </button>
+                    <div className="md:hidden fixed top-21 left-0 w-full z-40">
+        <BarRecherche isNavbar={false} />
+      </div>
 
                   <div className='relative'>
                        {/* Profil */}

@@ -130,7 +130,7 @@ export default function Hero() {
         {/* Bouton Global */}
           <div className=" flex justify-center items-center bg-white ">
              
-        <Link  to="/boutique" 
+        <Link  to="/collection" 
          >
           
               <Boutton textb='Visiter bouique'/>
