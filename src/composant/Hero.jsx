@@ -100,7 +100,7 @@ export default function Hero() {
       <div className="max-w-10xl mx-auto px-1.5  h-full flex flex-col justify-center">
        
         {/* --- GRILLE PC --- */}
-        <div className="hidden md:grid grid-cols-4 grid-rows-2 gap-1 h-130">
+        <div className="hidden md:grid grid-cols-4 grid-rows-2 gap-1 h-130 ">
           <div className="col-span-2 row-span-2 relative overflow-hidden group ">
             <img src={images[0].src} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" alt="Bijou" />
             <div className="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition-colors"></div>
@@ -116,7 +116,7 @@ export default function Hero() {
             <img src={images[3].src} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" alt="Bijou" />
           </div>
         </div>
-       <div className="md:hidden w-full mt-2 h-100  rounded-2xl  flex items-ce+6nter flex-col overflow-hidden">
+       <div className="md:hidden w-full mt-22 h-100  rounded-2xl  flex items-ce+6nter flex-col overflow-hidden">
               <Caroussel autoSlide={true} autoSlideInterval={3000}>
                 {images.map((image) => (
                   <img 
