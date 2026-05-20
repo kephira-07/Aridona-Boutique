@@ -16,8 +16,9 @@ export default function Navbar() {
   
   const [isScrolled, setIsScrolled] = useState(false);
   const [Visible, setVisible] = useState(false);
-  const {setMontreRecherche,getPanierCount}=useContext(ShopContext);
+  const {setMontreRecherche,getPanierCount, montreRecherche, }=useContext(ShopContext);
    const [montreProfilmenu,setMontreProfilmenu]= useState(false);
+  
   
 
   // Gestion du scroll ultra-légère
@@ -268,9 +269,11 @@ export default function Navbar() {
         
        
       </header>
-      <div className="md:hidden fixed top-21 left-0 w-full z-40 transition-all duration-300">
-        <BarRecherche isNavbar={false} />
-      </div>
+   {montreRecherche && (
+        <div className="md:hidden fixed top-21 left-0 w-full z-50 bg-white transition-all duration-300">
+          <BarRecherche isNavbar={false} />
+        </div>
+      )}
 
        
 

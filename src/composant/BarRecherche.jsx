@@ -12,7 +12,7 @@ export default function BarRecherche({ isNavbar }) {
 
   const [showSuggestions, setShowSuggestions] = useState(false);
   const navigate = useNavigate();
-  const location = useLocation(); // On récupère la route actuelle
+  const location = useLocation();
   const inputRef = useRef(null);
 
   // Suggestions filtrées (max 5)
@@ -23,7 +23,7 @@ export default function BarRecherche({ isNavbar }) {
       .slice(0, 5);
   }, [recherche, produits]);
 
-  // Si on tape du texte et qu'on n'est pas sur la page collection, on y va automatiquement
+  // Gestion de l'affichage des suggestions et de la redirection
   useEffect(() => {
     if (recherche.trim().length > 0) {
       setShowSuggestions(true);
@@ -36,22 +36,26 @@ export default function BarRecherche({ isNavbar }) {
   }, [recherche, location.pathname, navigate]);
 
   const handleSuggestionClick = (produit) => {
-    setRecherche('');               // vide la recherche
-    setShowSuggestions(false);      // ferme la liste
+    setRecherche('');               // vide l'input
+    setShowSuggestions(false);      // ferme le dropdown
     setMontreRecherche(false);      // Ferme l'overlay mobile si ouvert
     navigate(`/produit/${produit._id}`); 
   };
 
   const handleKeyPress = (e) => {
-    if (e.key === 'Entrée' || e.key === 'Enter') {
+    if (e.key === 'Enter') {
       setShowSuggestions(false);
       setMontreRecherche(false);
-      inputRef.current?.blur(); // Enlève le focus du clavier
+      inputRef.current?.blur();
     }
   };
 
-  // Si on est sur mobile (!isNavbar) et que l'overlay est masqué, on ne rend rien
-  if (!isNavbar && !montreRecherche) return null;
+  // --- LA CORRECTION EST ICI ---
+  // Si on est sur mobile (!isNavbar) ET que l'utilisateur n'a pas cliqué sur la loupe,
+  // alors on ne dessine pas le composant.
+  if (!isNavbar && !montreRecherche) {
+    return null;
+  }
 
   return (
     <div className={`flex items-center justify-center ${isNavbar ? 'w-full mx-10' : 'w-full py-5 bg-white border-b'}`}>
