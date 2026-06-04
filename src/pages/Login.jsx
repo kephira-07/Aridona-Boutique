@@ -1,7 +1,7 @@
 import React,{useState} from 'react'
 
 const Login = () => {
-const [etat, setEtat] = useState('Connexion'); // 'Connexion' ou 'Inscription' ou 'Oubli'
+const [etatactuel, setEtatactuel] = useState('Connexion'); // 'Connexion' ou 'Inscription' ou 'Oubli'
 
   return (
     <div className="min-h-[90vh] flex items-center justify-center bg-[#fdfdfd] px-4 py-10">
@@ -10,7 +10,7 @@ const [etat, setEtat] = useState('Connexion'); // 'Connexion' ou 'Inscription' o
         {/* Titre Dynamique avec Alice */}
         <div className="text-center mb-8">
           <h1 className="font-alice text-3xl text-gray-800 tracking-widest transition-all">
-            {etat === 'Connexion' ? 'Bienvenue' : etat === 'Inscription' ? 'Créer un Compte' : 'Récupération'}
+            {etatactuel === 'Connexion' ? 'Bienvenue' : etatactuel === 'Inscription' ? 'Créer un Compte' : 'Récupération'}
           </h1>
           <p className="font-alice text-xs text-amber-600 uppercase tracking-[0.2em] mt-2">
             Arilona Joaillerie
@@ -20,7 +20,7 @@ const [etat, setEtat] = useState('Connexion'); // 'Connexion' ou 'Inscription' o
         <form className="space-y-5" onSubmit={(e) => e.preventDefault()}>
           
           {/* Champ Nom (Uniquement pour l'Inscription) */}
-          {etat === 'Inscription' && (
+          {etatactuel === 'Inscription' && (
             <div className="animate-in slide-in-from-top-2 duration-300">
               <label className="text-[10px] uppercase tracking-widest text-gray-400 ml-1">Nom Complet</label>
               <input 
@@ -44,7 +44,7 @@ const [etat, setEtat] = useState('Connexion'); // 'Connexion' ou 'Inscription' o
           </div>
 
           {/* Champ Mot de Passe (Caché si Oubli) */}
-          {etat !== 'Oubli' && (
+          {etatactuel !== 'Oubli' && (
             <div>
               <label className="text-[10px] uppercase tracking-widest text-gray-400 ml-1">Mot de passe</label>
               <input 
@@ -57,10 +57,10 @@ const [etat, setEtat] = useState('Connexion'); // 'Connexion' ou 'Inscription' o
           )}
 
           {/* Mot de passe oublié (Uniquement en mode Connexion) */}
-          {etat === 'Connexion' && (
+          {etatactuel === 'Connexion' && (
             <div className="text-right">
               <button 
-                onClick={() => setEtat('Oubli')}
+                onClick={() => setEtatactuel('Oubli')}
                 className="text-[10px] uppercase tracking-widest text-gray-400 hover:text-amber-700 transition-colors"
               >
                 Mot de passe oublié ?
@@ -70,17 +70,17 @@ const [etat, setEtat] = useState('Connexion'); // 'Connexion' ou 'Inscription' o
 
           {/* Bouton Principal avec ton effet de mouvement */}
           <button className="w-full bg-black text-white py-4 mt-4 rounded-sm font-alice text-sm tracking-[0.2em] uppercase transition-all active:scale-95 hover:bg-zinc-800 shadow-lg">
-            {etat === 'Connexion' ? 'Se Connecter' : etat === 'Inscription' ? 'Rejoindre Arilona' : 'Envoyer le lien'}
+            {etatactuel === 'Connexion' ? 'Se Connecter' : etatactuel === 'Inscription' ? 'Rejoindre Arilona' : 'Envoyer le lien'}
           </button>
         </form>
 
         {/* Pied de page de la carte : Switch entre les états */}
         <div className="mt-8 text-center border-t border-gray-50 pt-6">
-          {etat === 'Connexion' ? (
+          {etatactuel === 'Connexion' ? (
             <p className="text-xs text-gray-500 font-alice italic">
               Pas encore de compte ?{' '}
               <button 
-                onClick={() => setEtat('Inscription')}
+                onClick={() => setEtatactuel('Inscription')}
                 className="text-amber-700 not-italic font-bold uppercase tracking-widest ml-1 hover:underline"
               >
                 Créer un compte
@@ -90,7 +90,7 @@ const [etat, setEtat] = useState('Connexion'); // 'Connexion' ou 'Inscription' o
             <p className="text-xs text-gray-500 font-alice italic">
               Déjà membre ?{' '}
               <button 
-                onClick={() => setEtat('Connexion')}
+                onClick={() => setEtatactuel('Connexion')}
                 className="text-amber-700 not-italic font-bold uppercase tracking-widest ml-1 hover:underline"
               >
                 Se connecter
@@ -102,5 +102,5 @@ const [etat, setEtat] = useState('Connexion'); // 'Connexion' ou 'Inscription' o
       </div>
     </div>
   );
-};
+}; 
 export default Login;

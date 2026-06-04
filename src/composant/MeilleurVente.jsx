@@ -27,7 +27,7 @@ const MeilleurVente = () => {
             <ProduitItem 
               key={index} 
               id={item.id} 
-              img={item.img[0]} 
+              image={item.image[0]} 
               name={item.name} 
               price={item.price} 
             />

@@ -19,7 +19,7 @@ const PageProduit = () => {
     produits.map((item)=>{
       if(item._id === produitId){
         setProduitData(item);
-        setImage(item.img[0]);
+        setImage(item.image[0]);
      
         return null
       } 
@@ -38,7 +38,7 @@ const PageProduit = () => {
       
       {/* Liste des miniatures */}
       <div className='flex md:flex-col overflow-x-auto md:overflow-y-auto justify-start gap-3 md:w-[20%] w-full no-scrollbar'>
-        {produitData.img.map((item, index) => (
+        {produitData.image.map((item, index) => (
           <div 
             key={index}
             onClick={() => setImage(item)}
@@ -115,7 +115,7 @@ const PageProduit = () => {
       </div>
 
       <p className='mt-6 text-3xl font-light text-amber-900'>
-        {produitData.price.toLocaleString()} {monnaie}
+        {produitData.prix.toLocaleString()} {monnaie}
       </p>
       
       <p className='mt-6 text-stone-600 leading-relaxed font-alice text-lg md:w-11/12'>
@@ -126,7 +126,7 @@ const PageProduit = () => {
       <div className='flex flex-col gap-4 my-10'>
           <p className='font-medium text-stone-800'>Sélectionner une taille :</p>
           <div className='flex flex-wrap gap-3'>
-            {produitData.size.map((item, index) => (
+            {produitData.sizes.map((item, index) => (
               <button 
                 key={index} 
                 onClick={() => setSize(item)}

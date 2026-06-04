@@ -3,7 +3,7 @@ import { ShopContext } from '../context/ShopContext';
 import { Link } from 'react-router-dom';
 import { Heart } from "lucide-react"; // N'oublie pas d'installer lucide-react
 
-const ProduitItem = ({ id, img, name, price }) => {
+const ProduitItem = ({ id, image, name, prix }) => {
     const { monnaie } = React.useContext(ShopContext);
 
     return (
@@ -14,12 +14,11 @@ const ProduitItem = ({ id, img, name, price }) => {
             <div className='relative overflow-hidden rounded-xl aspect-square'> 
                 
                
-                <img 
-                    className='w-full h-full object-cover transition-transform duration-500 group-hover:scale-110' 
-                    src={img} 
+                <img className='w-full h-full object-cover transition-transform duration-500 group-hover:scale-110' 
+                    src={image} 
                     alt={name} 
                 />
-
+                
                
                 <button 
                     onClick={(e) => e.preventDefault()} // Empêche d'ouvrir la page produit au clic
@@ -39,8 +38,8 @@ const ProduitItem = ({ id, img, name, price }) => {
                 </div>
             </div>
             
-            <p className='pt-3 pb-1 text-sm'>{name}</p>
-            <p className='text-sm font-medium'>{price} {monnaie}</p>
+            <p className='pt-3 pb-1 text-sm'>{image}</p>
+            <p className='text-sm font-medium'>{prix} {monnaie}</p>
         </Link>
     );
 };

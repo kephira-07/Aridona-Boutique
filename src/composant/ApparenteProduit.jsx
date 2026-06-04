@@ -27,8 +27,8 @@ const ApparenteProduit = ({ categorie, matiere }) => {
           <ProduitItem
             key={index}
             id={item._id}
-            img={item.img[0]} 
-            name={item.name}
+            image={item.image[0]} 
+            nom={item.nom}
             price={item.price}
           />
         ))}

@@ -27,9 +27,9 @@ const DerniereCollection = () => {
             <ProduitItem 
               key={index} 
               id={item._id} 
-              img={item.img[0]} 
-              name={item.name} 
-              price={item.price} 
+              image={item.image[0]} 
+              nom={item.nom} 
+              prix={item.prix} 
             />
           ))
         }
