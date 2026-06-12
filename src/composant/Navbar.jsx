@@ -8,9 +8,10 @@ import logo2 from '../assets/logo2.svg';
 
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
-  const [visible, setVisible] = useState(false); // Garder les minuscules par convention standard
+  const [visible, setVisible] = useState(false);
   const { setMontreRecherche, getPanierCount, montreRecherche } = useContext(ShopContext);
-  const [montreProfilmenu, setMontreProfilmenu] = useState(false);
+  const { getNombreFavoris } = useContext(ShopContext);
+    const totalFavoris = getNombreFavoris ? getNombreFavoris() : 0;
 
   // Gestion du scroll
   useEffect(() => {
@@ -23,11 +24,7 @@ export default function Navbar() {
 
   // Bloquer le scroll quand le menu mobile est ouvert
   useEffect(() => {
-    if (visible) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = 'unset';
-    }
+    document.body.style.overflow = visible ? 'hidden' : 'unset';
   }, [visible]);
 
   return (
@@ -58,36 +55,42 @@ export default function Navbar() {
         </div>
 
         {/* VERSION PC */}
-        <div className={`hidden md:flex items-center justify-between px-20 transition-all duration-300 ${
-          isScrolled ? 'bg-white/80 h-20 backdrop-blur-md shadow-sm' : 'bg-white h-24'
+        <div className={`hidden md:flex items-center justify-between px-20 h-20 transition-all duration-300 ${
+          isScrolled ? 'bg-white/80 backdrop-blur-md shadow-sm' : 'bg-white'
         }`}>
           {/* Logo */}
           <div className={`transition-all duration-500 ${isScrolled ? 'scale-90' : 'scale-100'}`}>
-            <Link to="/" className="flex items-center cursor-pointer h-36 w-52">
+            <Link to="/" className="flex items-center cursor-pointer h-34 w-40">
               <img src={logo2} alt="Logo" className="object-contain w-full h-full" />
             </Link>
           </div>
 
-          {/* Barre de recherche (Les suggestions s'afficheront en-dessous grâce au flux relatif/absolu de BarRecherche) */}
+          {/* Barre de recherche */}
           <div className="w-1/3 relative">
             <BarRecherche isNavbar={true} />
           </div>
 
           {/* Icônes Actions */}
           <div className="flex items-center gap-6">
-            {/* Profil */}
-            <Link to="/login" className="text-gray-800 hover:text-amber-500 transition-colors relative p-1"><User className="w-6 h-6" /></Link>
+            <Link to="/login" aria-label="Profil" className="text-gray-800 hover:text-amber-500 transition-colors relative p-1">
+              <User className="w-6 h-6" />
+            </Link>
 
-            {/* Favoris */}
-            <button className="text-gray-800 hover:text-amber-500 transition-colors cursor-pointer p-1">
-              <Heart className="w-6 h-6" />
-            </button>
+          <Link to="/favoris" className="relative p-2 text-stone-600 hover:text-red-500 transition-colors">
+                    <Heart className="w-5 h-5" />
+                    
+                    {/* 🛠️ Le badge n'apparait que si le nombre de favoris est supérieur à 0 */}
+                    {totalFavoris > 0 && (
+                        <span className="absolute top-0 right-0 bg-red-500 text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center animate-scale-in">
+                            {totalFavoris}
+                        </span>
+                    )}
+                </Link>
 
-            {/* Panier */}
-            <Link to="/panier" className="text-gray-800 hover:text-amber-500 transition-colors relative p-1">
+            <Link to="/panier" aria-label="Panier" className="text-gray-800 hover:text-amber-500 transition-colors relative p-1">
               <ShoppingCart className="w-6 h-6" />
               <span className="absolute -top-1 -right-1 w-4 h-4 bg-amber-500 text-white text-[10px] flex items-center justify-center rounded-full font-bold">
-                {getPanierCount()}
+                {getPanierCount?.() || 0}
               </span>
             </Link>
           </div>
@@ -98,50 +101,53 @@ export default function Navbar() {
           <div className={`flex items-center h-16 justify-between px-6 border-b border-gray-100 ${
             isScrolled ? 'bg-white/90 backdrop-blur-md shadow-sm' : 'bg-white'
           }`}>
-            {/* Burger */}
-            <button className="text-black p-1 rounded-full" onClick={() => setVisible(true)}>
+            <button aria-label="Ouvrir menu mobile" className="text-black p-1 rounded-full" onClick={() => setVisible(true)}>
               <Menu className="w-6 h-6" />
             </button>
 
-            {/* Logo */}
-            <div className="h-12">
+            <div className="h-32 w-32">
               <Link to="/">
-                <img src={logo2} alt="Logo" className="h-full w-auto object-contain" />
+                <img src={logo2} alt="Logo" className="h-full w-full object-contain" />
               </Link>
             </div>
 
-            {/* Actions Droite */}
             <div className="flex items-center gap-3">
               <button 
+                aria-label="Recherche"
                 onClick={() => setMontreRecherche(!montreRecherche)} 
                 className={`p-1 rounded-full transition-colors ${montreRecherche ? 'text-amber-500' : 'text-black'}`}
               >
                 <Search className="w-5 h-5" />
               </button>
 
-              {/* Menu Profil Dropdown Mobile */}
-              <div className="relative">
-                 <Link to="/login"  className="text-black p-1 rounded-full" className="px-4 py-3 text-sm text-gray-700 hover:bg-amber-50/50"><User className="w-5 h-5" /></Link>
-                  
-              </div>
+              <Link to="/login" aria-label="Profil" className="text-black p-1 rounded-full px-4 py-3 text-sm text-gray-700 hover:bg-amber-50/50">
+                <User className="w-5 h-5" />
+              </Link>
+              <Link to="/favoris" className="relative p-2 text-stone-600 hover:text-red-500 transition-colors">
+                    <Heart className="w-5 h-5" />
+                    
+                    {/* 🛠️ Le badge n'apparait que si le nombre de favoris est supérieur à 0 */}
+                    {totalFavoris > 0 && (
+                        <span className="absolute top-0 right-0 bg-red-500 text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center animate-scale-in">
+                            {totalFavoris}
+                        </span>
+                    )}
+                </Link>
 
-              <Link to="/panier" className="text-black relative p-1">
+              <Link to="/panier" aria-label="Panier" className="text-black relative p-1">
                 <ShoppingCart className="w-5 h-5" />
                 <span className="absolute -top-1 -right-1 w-4 h-4 bg-amber-500 text-white text-[10px] flex items-center justify-center rounded-full font-bold">
-                  {getPanierCount()}
+                  {getPanierCount?.() || 0}
                 </span>
               </Link>
             </div>
           </div>
         </div>
 
-        {/* CONTENEUR RECHERCHE MOBILE APPELÉ SOUS LA NAVBAR */}
+        {/* CONTENEUR RECHERCHE MOBILE */}
         {montreRecherche && (
           <>
-            {/* Arrière-plan sombre pour fermer la recherche si on clique à côté */}
             <div className="md:hidden fixed inset-0 top-[88px] bg-black/20 z-40" onClick={() => setMontreRecherche(false)} />
-            
-            {/* Input de recherche placé juste en dessous du header mobile (h-6 bandeau + h-16 nav = 88px soit top-[88px]) */}
             <div className="md:hidden fixed top-[88px] left-0 w-full z-50 bg-white p-3 shadow-md border-b transition-all duration-300">
               <BarRecherche isNavbar={false} />
             </div>
@@ -149,20 +155,20 @@ export default function Navbar() {
         )}
       </header>
 
-      {/* --- MENU TIROIR MOBILE (DRAWER) --- */}
+      {/* MENU TIROIR MOBILE */}
       <div 
         className={`fixed inset-0 z-[100] bg-black/50 transition-opacity duration-300 md:hidden ${visible ? 'opacity-100 visible' : 'opacity-0 invisible'}`}
         onClick={() => setVisible(false)}
       >
         <div 
           className={`absolute top-0 left-0 w-4/5 max-w-sm h-full bg-white shadow-2xl transition-transform duration-300 ease-in-out flex flex-col ${visible ? 'translate-x-0' : '-translate-x-full'}`}
-          onClick={(e) => e.stopPropagation()} // Évite de fermer le tiroir en cliquant dedans
+          onClick={(e) => e.stopPropagation()}
         >
           <div className="flex items-center justify-between p-4 border-b">
             <div className="h-10"> 
               <img src={logo2} alt="Logo" className="object-contain h-full w-auto" />
             </div>
-            <button onClick={() => setVisible(false)} className="p-2 text-gray-500 hover:bg-gray-100 rounded-full">
+            <button aria-label="Fermer menu mobile" onClick={() => setVisible(false)} className="p-2 text-gray-500 hover:bg-gray-100 rounded-full">
               <X className="w-6 h-6" />
             </button>
           </div>

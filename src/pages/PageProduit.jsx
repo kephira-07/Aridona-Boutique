@@ -146,12 +146,10 @@ const PageProduit = () => {
       </div>
       
       {/* Bouton d'action */}
-      <button 
-        onClick={() => ajouterPanier(produitData._id, size)} 
-        className=''
-      >
-       <Boutton textb=' AJOUTER AU PANIER' />
-      </button>
+   <Boutton 
+  textb=' AJOUTER AU PANIER' 
+  onClick={() => ajouterPanier(produitData._id, size)} 
+/>
 
       <hr className='mt-10 border-stone-200 md:w-11/12'/>
       

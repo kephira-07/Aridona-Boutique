@@ -22,6 +22,24 @@ const ShopContextProvider = (props) => {
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [token, setToken] = useState(localStorage.getItem('token') || '');
 
+  const [favoris, setFavoris] = useState([]);
+
+    // 🛠️ ÉTAPE 2 : Fonction globale pour basculer un favori (Ajouter/Retirer)
+    const toggleFavori = (productId) => {
+        setFavoris((prevFavoris) => {
+            if (prevFavoris.includes(productId)) {
+                // Si déjà favori, on le retire
+                return prevFavoris.filter(id => id !== productId);
+            } else {
+                // Sinon, on l'ajoute
+                return [...prevFavoris, productId];
+            }
+        });
+    };
+
+    // 🛠️ ÉTAPE 3 : Calculer le nombre total de favoris uniques
+    const getNombreFavoris = () => favoris.length;
+
   // 3. LA REQUÊTE TENTE DE CHANGER LES MOCKS PAR LES VRAIES DONNÉES
   const getProductsData = async () => {
     try {
@@ -143,7 +161,7 @@ const suggestions = useMemo(() => {
     produits, monnaie, delivery_free, recherche, setRecherche, montreRecherche, 
     setMontreRecherche, panierProduits, ajouterPanier, getPanierCount, 
     updateQuantity, getPanierMontant, showSuggestions, setShowSuggestions,
-    suggestions, backendUrl, token, setToken
+    suggestions, backendUrl, token, setToken, favoris, setFavoris, toggleFavori, getNombreFavoris
   };
 
   return (

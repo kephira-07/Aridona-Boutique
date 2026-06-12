@@ -44,11 +44,15 @@ const Collection = () => {
         }
     }, [location.state]);
 
-    const toggleCategorie = (id) => {
-        setSelectedCategories(prev => 
-            prev.includes(id) ? prev.filter(item => item !== id) : [...prev, id]
-        );
-    };
+   const toggleCategorie = (id) => {
+  // Si la catégorie cliquée est déjà active, on la désactive (on repasse à "Tout voir")
+  if (selectedCategories.includes(id)) {
+    setSelectedCategories([]); // Vide le filtre
+  } else {
+    // Sinon, on remplace le tableau par un tableau contenant UNIQUEMENT le nouvel ID
+    setSelectedCategories([id]); 
+  }
+};
 
     const toggleMatiere = (val) => {
         setSelectedMatieres(prev => 
@@ -86,7 +90,7 @@ const Collection = () => {
     }, [selectedCategories, selectedMatieres, recherche, sortType, produits]);
 
     return (
-        <div className="min-h-screen bg-white pt-20">
+        <div className="min-h-screen bg-white pt-40">
             
             {/* BARRE DE CATÉGORIES INTELLIGENTE */}
             <Categorybar 
@@ -95,11 +99,11 @@ const Collection = () => {
                 clearCategories={() => setSelectedCategories([])}
             />
 
-            <div className="max-w-7xl mx-auto px-4 mt-6">
+            <div className="max-w-7xl mx-auto px-4 mt-3">
                 
                 {/* BARRE D'OUTILS */}
-                <div className="flex items-center justify-between gap-4 mb-6 pb-4 border-b border-gray-100">
-                    <div className="hidden sm:block">
+                <div className="flex items-center justify-between gap-4 mb-6 pb-2 border-b border-gray-100">
+                    <div className="">
                         <Titre text1={'Notre'} text2={'Collection'} />
                     </div>
                     
@@ -108,32 +112,33 @@ const Collection = () => {
                         className="flex items-center gap-2 px-4 py-2 border border-gray-200 rounded-xl text-xs font-semibold uppercase tracking-wider text-slate-700 bg-gray-50 hover:bg-gray-100 transition-colors"
                     >
                         <SlidersHorizontal className="h-3.5 w-3.5 text-amber-600" />
-                        Filtres avancés {(selectedCategories.length + selectedMatieres.length) > 0 && `(${selectedCategories.length + selectedMatieres.length})`}
+                        Filtres  {(selectedCategories.length + selectedMatieres.length) > 0 && `(${selectedCategories.length + selectedMatieres.length})`}
                     </button>
 
                     {/* Sélecteur de Tri */}
-                    <div className="relative flex items-center border border-gray-200 rounded-xl px-3 py-2 bg-gray-50 text-xs font-medium text-slate-700">
+                    <div className="relative flex items-center border border-gray-200 rounded-xl px-1 py-1 bg-gray-50 text-xs font-medium text-slate-700">
                         <select 
                             onChange={(e) => setSortType(e.target.value)} 
-                            className="appearance-none bg-transparent pr-6 outline-none cursor-pointer font-semibold"
+                            className="appearance-none bg-transparent  outline-none cursor-pointer font-semibold"
                         >
                             <option value="reveler">Pertinence</option>
                             <option value="prix-asc">Prix : Croissant</option>
                             <option value="prix-desc">Prix : Décroissant</option>
                         </select>
-                        <ChevronDown className="h-3 w-3 absolute right-2.5 text-gray-400 pointer-events-none" />
+                        <ChevronDown className="h-3 w-3 absolute right-2.5 text-gray-700 pointer-events-none" />
                     </div>
                 </div>
 
                 {/* GRILLE PRODUITS */}
                 <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-x-3 gap-y-8">
                     {filtreProduits.map((item, index) => (
-                        <ProduitItem 
-                            key={item._id || item.id || index} 
-                            nom={item.nom || item.name} 
-                            prix={item.prix || item.price} 
-                            id={item._id || item.id} 
-                            image={item.image || item.img} 
+                    <ProduitItem 
+                            key={index} 
+                            id={item._id} 
+                            slug={item.slug} // 🌟 N'oublie surtout pas cette ligne !
+                            nom={item.nom} 
+                            prix={item.prix} 
+                            image={item.image} 
                         />
                     ))}
                 </div>
