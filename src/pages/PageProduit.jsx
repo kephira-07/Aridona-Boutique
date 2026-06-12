@@ -7,27 +7,31 @@ import ApparenteProduit from '../composant/ApparenteProduit'
 import Boutton from '../composant/Boutton'
 
 const PageProduit = () => {
-  const {produitId}=useParams();
-  const {produits,monnaie,ajouterPanier}= useContext(ShopContext);
-  const [produitData,setProduitData]=useState(false);
-  const [image,setImage]=useState('');
  
-  const [size,setSize]=useState('');
+  const { slug } = useParams(); // Récupère le slug depuis l'URL
+  const { produits, monnaie, ajouterPanier } = useContext(ShopContext);
+  const [produitData, setProduitData] = useState(false);
+  const [image, setImage] = useState('');
+ 
+  const [size, setSize] = useState('');
   const [showModal, setShowModal] = useState(false);
 
-  const fetchProduitData= async ()=>{
-    produits.map((item)=>{
-      if(item._id === produitId){
-        setProduitData(item);
-        setImage(item.image[0]);
-     
-        return null
-      } 
-    })
-  }
-  useEffect(()=>{
+  // --- RECHERCHE PAR SLUG CORRIGÉE ---
+  const fetchProduitData = async () => {
+    // Utilisation de .find() plutôt qu'un .map() pour plus de performance et de propreté
+    const produitTrouve = produits.find((item) => item.slug === slug);
+    
+    if (produitTrouve) {
+      setProduitData(produitTrouve);
+      setImage(produitTrouve.image[0]);
+    }
+  };
+
+  useEffect(() => {
     fetchProduitData();
-  },[produitId,produits])
+  }, [slug, produits]); // On écoute les changements du 'slug' et du tableau 'produits'
+
+
   return produitData ? (
   <div className='border-t-2 mt-20 md:mt-32 pt-10 transition-opacity ease-in duration-500 opacity-100'>
   {/* --- Conteneur Principal --- */}
@@ -187,5 +191,4 @@ const PageProduit = () => {
 </div>
   ): <div className='opacity-0'></div>
 }
-
-export default PageProduit
+export default PageProduit;

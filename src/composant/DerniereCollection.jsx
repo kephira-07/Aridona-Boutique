@@ -13,7 +13,7 @@ const DerniereCollection = () => {
    }, []);
 
   return (
-    <div className=''>
+    <div className=' pt-15'>
       <div className='pb-10 px-10 text-3xl'>
         <Titre text1='Découvrez notre' text2='Dernière collection' />
         <p className='w-3/4  text-xs sm:text-sm md:text-base font-averia text-gray-600'>

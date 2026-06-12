@@ -57,7 +57,7 @@ const Panier = () => {
               >
                 <div className='flex items-start gap-6'>
                   <img 
-                    src={produitsData.img[0]} 
+                    src={produitsData.image[0]} 
                     className='w-16 sm:w-20' 
                     alt={produitsData.name} 
                   />

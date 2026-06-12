@@ -30,9 +30,10 @@ function App() {
 
      <Routes> 
         <Route path='/' element={<Home />} />
+        
       
         <Route path='/collection' element={<Collection />} />
-        <Route path='/produit/:produitId' element={<PageProduit />} />  
+        <Route path='/produit/:slug' element={<PageProduit />} />  
         <Route path='/panier' element={<Panier/>}/>
         <Route path='/passer-commande' element={<PasserCommande/>}/>
         <Route path='/login' element={<Login />} />
@@ -44,4 +45,3 @@ function App() {
 }
 
 export default App
-  

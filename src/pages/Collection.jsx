@@ -1,151 +1,233 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { ShopContext } from '../context/ShopContext';
-import { ChevronRight } from "lucide-react";
+import { useLocation } from 'react-router-dom';
+import { SlidersHorizontal, X, ChevronDown } from "lucide-react";
 import Titre from '../composant/Titre';
 import ProduitItem from "../composant/ProduitItem";
+import Categorybar from "../composant/Categorybar"; 
+import axios from "axios";
+import { backendUrl } from "../config";
 
 const Collection = () => {
-    // Récupération sécurisée du contexte
-    const { produits, recherche } = React.useContext(ShopContext);
+    const { produits, recherche } = useContext(ShopContext);
+    const location = useLocation();
     
+    // Ajout de categoriesList pour alimenter le tiroir de filtres
+    const [categoriesList, setCategoriesList] = useState([]); 
     const [showFilter, setShowFilter] = useState(false);
     const [filtreProduits, setFiltreProduits] = useState([]);
-    const [categorie, setCategorie] = useState([]);
-    const [matiere, setMatiere] = useState([]);
-    const [sortType, setSortType] = useState('reveler'); // 'reveler' ou '' par défaut
+    const [selectedCategories, setSelectedCategories] = useState([]);
+    const [selectedMatieres, setSelectedMatieres] = useState([]);
+    const [sortType, setSortType] = useState('reveler');
 
-    const toggleCategorie = (e) => {
-        const value = e.target.value;
-        if (categorie.includes(value)) {
-            setCategorie(prev => prev.filter(item => item !== value));
-        } else {
-            setCategorie(prev => [...prev, value]);
+    // Charger les catégories pour le tiroir de filtres
+    useEffect(() => {
+        const fetchCategories = async () => {
+            try {
+                const response = await axios.get(`${backendUrl}/api/categorie`);
+                if (response.data.success) {
+                    setCategoriesList(response.data.data);
+                }
+            } catch (error) {
+                console.error("Erreur lors du chargement des catégories dans Collection:", error.message);
+            }
+        };
+        fetchCategories();
+    }, []);
+
+    // Intercepter la catégorie cliquée sur la Home Page
+    useEffect(() => {
+        if (location.state && location.state.initialCategory) {
+            setSelectedCategories([location.state.initialCategory]);
+            // Nettoie l'état pour éviter les conflits au rechargement ou retour arrière
+            window.history.replaceState({}, document.title);
         }
+    }, [location.state]);
+
+    const toggleCategorie = (id) => {
+        setSelectedCategories(prev => 
+            prev.includes(id) ? prev.filter(item => item !== id) : [...prev, id]
+        );
     };
 
-    const toggleMatiere = (e) => {
-        const value = e.target.value;
-        if (matiere.includes(value)) {
-            setMatiere(prev => prev.filter(item => item !== value));
-        } else {
-            setMatiere(prev => [...prev, value]);
-        }
+    const toggleMatiere = (val) => {
+        setSelectedMatieres(prev => 
+            prev.includes(val) ? prev.filter(item => item !== val) : [...prev, val]
+        );
     };
 
-    // --- TOUTE LA LOGIQUE COMBINÉE (FILTRE + TRI) ---
+    // --- LOGIQUE DE FILTRAGE ET TRI ---
     useEffect(() => {
         if (!produits) return;
+        let copie = produits.slice();
 
-        let copieproduit = produits.slice();
-
-        // 1. Filtrage par texte recherché
         if (recherche.trim()) {
-            copieproduit = copieproduit.filter(item => 
-                item.name.toLowerCase().includes(recherche.toLowerCase())
-            );
+            copie = copie.filter(item => (item.nom || item.name || "").toLowerCase().includes(recherche.toLowerCase()));
         }
 
-        // 2. Filtrage par Catégorie
-        if (categorie.length > 0) {
-            copieproduit = copieproduit.filter(item => categorie.includes(item.category));
+        if (selectedCategories.length > 0) {
+            copie = copie.filter(item => {
+                const catId = item.categorie?._id || item.categorie;
+                return selectedCategories.includes(catId);
+            });
         }
 
-        // 3. Filtrage par Matière
-        if (matiere.length > 0) {
-            copieproduit = copieproduit.filter(item => matiere.includes(item.material));
+        if (selectedMatieres.length > 0) {
+            copie = copie.filter(item => selectedMatieres.includes(item.matiere));
         }
 
-        // 4. Application du Tri directement sur les résultats filtrés
-        switch (sortType) {
-            case 'prix-asc':
-                copieproduit.sort((a, b) => a.prix - b.prix);
-                break;
-            case 'prix-desc':
-                copieproduit.sort((a, b) => b.prix - a.prix);
-                break;
-            default:
-                // 'reveler' ou Pertinence -> Aucun tri, conserve l'ordre initial du fichier image.js
-                break;
+        if (sortType === 'prix-asc') {
+            copie.sort((a, b) => (a.prix || a.price) - (b.prix || b.price));
+        } else if (sortType === 'prix-desc') {
+            copie.sort((a, b) => (b.prix || b.price) - (a.prix || a.price));
         }
 
-        // On met à jour l'affichage une seule fois !
-        setFiltreProduits(copieproduit);
-
-    }, [categorie, matiere, recherche, sortType, produits]); // S'exécute dès qu'un élément change
+        setFiltreProduits(copie);
+    }, [selectedCategories, selectedMatieres, recherche, sortType, produits]);
 
     return (
-        <div>
-            {/* En tête */}
-            <div className="bg-[#ffffffd3] mt-20 md:mt-35 py-6 px-4 text-center">
-                <h2 className="text-3xl md:text-4xl font-stretch-50% text-[#d14f09] mb-2 uppercase tracking-widest">
-                    Éclat & Élégance
-                </h2>
-                <p className="text-gray-600 italic text-sm md:text-base max-w-2xl mx-auto">
-                    L'art de sublimer votre quotidien avec des pièces d'exception.
-                </p>
-            </div>
+        <div className="min-h-screen bg-white pt-20">
+            
+            {/* BARRE DE CATÉGORIES INTELLIGENTE */}
+            <Categorybar 
+                selectedCategories={selectedCategories} 
+                toggleCategorie={toggleCategorie}
+                clearCategories={() => setSelectedCategories([])}
+            />
 
-            {/* Conteneur principal */}
-            <div className='flex flex-col sm:flex-row gap-4 sm:gap-10 pt-10 md:px-5 border-t border-gray-100'>
+            <div className="max-w-7xl mx-auto px-4 mt-6">
                 
-                {/* Colonne gauche (Filtres) */}
-                <div className='min-w-full sm:min-w-60 px-4 sm:px-0'>
-                    <p onClick={() => setShowFilter(!showFilter)} className='my-2 text-lg md:text-xl flex items-center justify-between sm:justify-start cursor-pointer gap-2 uppercase font-medium text-gray-800'>
-                        Filtres
-                        <ChevronRight className={`h-4 w-4 sm:hidden transition-transform duration-300 ${showFilter ? 'rotate-90' : ''}`} />
-                    </p>
-
-                    {/* Catégories */}
-                    <div className={`border border-gray-200 rounded-sm pl-5 py-3 mt-4 ${showFilter ? 'block' : 'hidden'} sm:block transition-all`}>
-                        <p className="mb-3 text-xs font-bold text-[#d14f09]">CATÉGORIES</p>
-                        <div className="flex flex-col gap-2 text-sm font-light text-gray-700">
-                            <label className="flex items-center gap-2 cursor-pointer"><input type="checkbox" className="w-4 h-4 accent-[#d14f09]" value="Bagues" onChange={toggleCategorie}/> Bagues</label>
-                            <label className="flex items-center gap-2 cursor-pointer"><input type="checkbox" className="w-4 h-4 accent-[#d14f09]" value="Collier" onChange={toggleCategorie}/> Colliers</label>
-                            <label className="flex items-center gap-2 cursor-pointer"><input type="checkbox" className="w-4 h-4 accent-[#d14f09]" value="Boucleoreille" onChange={toggleCategorie}/> Boucles d'oreilles</label>
-                            <label className="flex items-center gap-2 cursor-pointer"><input type="checkbox" className="w-4 h-4 accent-[#d14f09]" value="Bracelet" onChange={toggleCategorie}/> Bracelets</label>
-                            <label className="flex items-center gap-2 cursor-pointer"><input type="checkbox" className="w-4 h-4 accent-[#d14f09]" value="Chainelunettes" onChange={toggleCategorie}/> Chaines de lunettes</label>
-                            <label className="flex items-center gap-2 cursor-pointer"><input type="checkbox" className="w-4 h-4 accent-[#d14f09]" value="Ensemble" onChange={toggleCategorie}/> Ensemble</label>
-                        </div>
+                {/* BARRE D'OUTILS */}
+                <div className="flex items-center justify-between gap-4 mb-6 pb-4 border-b border-gray-100">
+                    <div className="hidden sm:block">
+                        <Titre text1={'Notre'} text2={'Collection'} />
                     </div>
+                    
+                    <button 
+                        onClick={() => setShowFilter(true)}
+                        className="flex items-center gap-2 px-4 py-2 border border-gray-200 rounded-xl text-xs font-semibold uppercase tracking-wider text-slate-700 bg-gray-50 hover:bg-gray-100 transition-colors"
+                    >
+                        <SlidersHorizontal className="h-3.5 w-3.5 text-amber-600" />
+                        Filtres avancés {(selectedCategories.length + selectedMatieres.length) > 0 && `(${selectedCategories.length + selectedMatieres.length})`}
+                    </button>
 
-                    {/* Matière */}
-                    <div className={`border border-gray-200 rounded-sm pl-5 py-3 mt-4 ${showFilter ? 'block' : 'hidden'} sm:block transition-all`}>
-                        <p className="mb-3 text-xs font-bold text-[#d14f09]">MATIÈRE</p>
-                        <div className="flex flex-col gap-2 text-sm font-light text-gray-700">
-                            <label className="flex items-center gap-2 cursor-pointer"><input type="checkbox" className="w-4 h-4 accent-[#d14f09]" value="Argenter" onChange={toggleMatiere}/> Argenté</label>
-                            <label className="flex items-center gap-2 cursor-pointer"><input type="checkbox" className="w-4 h-4 accent-[#d14f09]" value="Dore" onChange={toggleMatiere}/> Doré</label>
-                            <label className="flex items-center gap-2 cursor-pointer"><input type="checkbox" className="w-4 h-4 accent-[#d14f09]" value="Perle" onChange={toggleMatiere}/> Perle</label>
-                        </div>
-                    </div>
-                </div>
-
-                {/* Colonne droite (Produits) */}
-                <div className='flex-1 px-4 sm:px-0'>
-                    <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
-                        <Titre text1={'Toute'} text2={'la collection'} />
-                        
-                        {/* Select de Tri */}
-                        <select onChange={(e) => setSortType(e.target.value)} className="w-full md:w-auto border border-gray-300 rounded-sm px-3 py-2 text-sm bg-white focus:ring-1 focus:ring-[#d14f09] outline-none">
-                            <option value="reveler">Trier par : Pertinence</option>
+                    {/* Sélecteur de Tri */}
+                    <div className="relative flex items-center border border-gray-200 rounded-xl px-3 py-2 bg-gray-50 text-xs font-medium text-slate-700">
+                        <select 
+                            onChange={(e) => setSortType(e.target.value)} 
+                            className="appearance-none bg-transparent pr-6 outline-none cursor-pointer font-semibold"
+                        >
+                            <option value="reveler">Pertinence</option>
                             <option value="prix-asc">Prix : Croissant</option>
                             <option value="prix-desc">Prix : Décroissant</option>
                         </select>
-                    </div>
-
-                    {/* Grille des produits */}
-                    <div className='grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-1 gap-y-8'>
-                        {filtreProduits.map((item, index) => (
-                            <ProduitItem 
-                                key={index} 
-                                nom={item.nom} 
-                                prix={item.prix} 
-                                id={item._id} 
-                                image={item.image && item.image[0] ? item.image[0] : 'https://placehold.co/600x600?text=Bijou'} 
-                            />
-                        ))}
+                        <ChevronDown className="h-3 w-3 absolute right-2.5 text-gray-400 pointer-events-none" />
                     </div>
                 </div>
+
+                {/* GRILLE PRODUITS */}
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-x-3 gap-y-8">
+                    {filtreProduits.map((item, index) => (
+                        <ProduitItem 
+                            key={item._id || item.id || index} 
+                            nom={item.nom || item.name} 
+                            prix={item.prix || item.price} 
+                            id={item._id || item.id} 
+                            image={item.image || item.img} 
+                        />
+                    ))}
+                </div>
+
+                {filtreProduits.length === 0 && (
+                    <div className="text-center py-20 text-gray-400 text-sm italic">
+                        Aucun bijou ne correspond à vos critères de recherche.
+                    </div>
+                )}
             </div>
+
+            {/* --- TIROIR DE FILTRES SLIDEOVER (MOBILE FIRST) --- */}
+            <div className={`fixed inset-0 z-50 transition-opacity duration-300 ${showFilter ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}>
+                <div onClick={() => setShowFilter(false)} className="absolute inset-0 bg-black/40 backdrop-blur-xs"></div>
+                
+                <div className={`absolute bottom-0 left-0 right-0 max-h-[85vh] md:max-h-full md:w-96 md:top-0 md:left-auto bg-white rounded-t-3xl md:rounded-t-none md:rounded-l-3xl shadow-2xl flex flex-col transition-transform duration-300 transform ${
+                    showFilter ? 'translate-y-0 md:translate-x-0' : 'translate-y-full md:translate-x-full'
+                }`}>
+                    
+                    <div className="p-5 border-b border-gray-100 flex items-center justify-between">
+                        <h3 className="text-sm font-bold tracking-widest uppercase text-slate-800">Ajuster la sélection</h3>
+                        <button onClick={() => setShowFilter(false)} className="p-2 hover:bg-gray-100 rounded-full text-gray-400 hover:text-slate-700 transition-colors">
+                            <X className="h-5 w-5" />
+                        </button>
+                    </div>
+
+                    <div className="p-6 overflow-y-auto space-y-8 flex-1">
+                        {/* Section Catégories réparée */}
+                        <div>
+                            <h4 className="text-xs font-bold text-amber-600 tracking-wider uppercase mb-4">Par Catégories</h4>
+                            <div className="grid grid-cols-2 gap-2">
+                                {categoriesList.map((cat) => {
+                                    const isChecked = selectedCategories.includes(cat._id);
+                                    return (
+                                        <button
+                                            key={cat._id}
+                                            onClick={() => toggleCategorie(cat._id)}
+                                            className={`py-2.5 px-3 rounded-xl border text-xs font-medium text-left transition-all ${
+                                                isChecked
+                                                ? 'bg-amber-50 border-amber-500 text-amber-800 font-semibold'
+                                                : 'bg-white border-gray-200 text-slate-600'
+                                            }`}
+                                        >
+                                            {cat.nom}
+                                        </button>
+                                    );
+                                })}
+                            </div>
+                        </div>
+
+                        {/* Section Matières */}
+                        <div>
+                            <h4 className="text-xs font-bold text-amber-600 tracking-wider uppercase mb-4">Par Matière</h4>
+                            <div className="flex flex-col gap-3">
+                                {[
+                                    { id: "Dore", label: "Doré à l'Or Fin" },
+                                    { id: "Argenter", label: "Argenté Scintillant" },
+                                    { id: "Perle", label: "Perles d'Eau Douce" }
+                                ].map((mat) => {
+                                    const isChecked = selectedMatieres.includes(mat.id);
+                                    return (
+                                        <label key={mat.id} className="flex items-center justify-between p-3 border border-gray-100 rounded-xl bg-gray-50/50 cursor-pointer hover:bg-gray-50 transition-colors">
+                                            <span className="text-xs font-medium text-slate-700">{mat.label}</span>
+                                            <input 
+                                                type="checkbox" 
+                                                checked={isChecked}
+                                                onChange={() => toggleMatiere(mat.id)}
+                                                className="w-4 h-4 rounded-sm accent-amber-600 cursor-pointer" 
+                                            />
+                                        </label>
+                                    );
+                                })}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="p-4 border-t border-gray-100 bg-gray-50 rounded-b-t-2xl flex gap-3">
+                        <button 
+                            onClick={() => { setSelectedCategories([]); setSelectedMatieres([]); }}
+                            className="flex-1 py-3 border border-gray-200 bg-white rounded-xl text-xs font-semibold text-slate-500 hover:text-slate-800 transition-colors"
+                        >
+                            Réinitialiser
+                        </button>
+                        <button 
+                            onClick={() => setShowFilter(false)}
+                            className="flex-1 py-3 bg-slate-900 text-white rounded-xl text-xs font-semibold tracking-wide shadow-md hover:bg-slate-800 transition-colors"
+                        >
+                            Voir les résultats
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+
         </div>
     );
 };

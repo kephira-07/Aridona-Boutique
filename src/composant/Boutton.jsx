@@ -5,7 +5,7 @@ const Boutton = ({ textb, onClick }) => {
   return (
     <button 
       onClick={onClick}
-      className='group relative mt-10 mb-5 flex items-center justify-center px-8 py-4 bg-transparent border border-amber-700/40 text-amber-900 transition-all duration-300 overflow-hidden cursor-pointer active:scale-98'
+      className='group relative mt-10 mb-5 flex items-center justify-center px-8 py-4  bg-amber-50 border border-amber-700/40 text-amber-900 transition-all duration-300 overflow-hidden cursor-pointer active:scale-98'
     >
       {/* Les coins intérieurs stylisés (Touche personnalisée Haute Joaillerie) */}
       <span className='absolute top-1 left-1 w-2 h-2 border-t border-l border-amber-700 transition-all duration-300 group-hover:top-2 group-hover:left-2'></span>

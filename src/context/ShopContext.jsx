@@ -1,20 +1,20 @@
 import { createContext, useState, useMemo, useEffect } from 'react';
 import { toast } from 'react-toastify';
-import axios from 'axios'; // 1. On importe axios
+import axios from 'axios'; 
+// 1. On réimporte tes produits de test (Mock Data) pour le secours
+import { produits as produitsMock } from '../assets/image';
 
-// 1. On crée et on exporte le contexte
 export const ShopContext = createContext();
 
-// 2. On crée le Provider
 const ShopContextProvider = (props) => {
-  // L'adresse de ton API backend
   const backendUrl = "http://localhost:4000"; 
 
   const monnaie = 'FCFA';
   const delivery_free = 500;
   
-  // S'initialise à vide, sera rempli par la base de données
-  const [produits, setProduits] = useState([]); 
+  // 2. PAR DÉFAUT : On initialise le state avec tes données de test (produitsMock)
+  // Comme ça, le site n'est JAMAIS vide au démarrage !
+  const [produits, setProduits] = useState(produitsMock); 
   
   const [recherche, setRecherche] = useState('');
   const [montreRecherche, setMontreRecherche] = useState(false);
@@ -22,37 +22,43 @@ const ShopContextProvider = (props) => {
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [token, setToken] = useState(localStorage.getItem('token') || '');
 
-  // 2. FONCTION POUR CHARGER LES VRAIS PRODUITS DEPUIS LE BACKEND
+  // 3. LA REQUÊTE TENTE DE CHANGER LES MOCKS PAR LES VRAIES DONNÉES
   const getProductsData = async () => {
     try {
       const response = await axios.get(`${backendUrl}/api/produit/list`);
       if (response.data.success) {
-        // IMPORTANT : Ton backend renvoie "produits" ou "produit". 
-        // Si tu as un souci, vérifie la clé renvoyée par ton contrôleur listproduits.
-        setProduits(response.data.produits || response.data.produit || []);
-      } else {
-        toast.error(response.data.message);
+        const donneesServeur = response.data.produits || response.data.produit;
+        
+        // Si le serveur renvoie bien des produits, on remplace les mocks
+        if (donneesServeur && donneesServeur.length > 0) {
+          setProduits(donneesServeur);
+        }
       }
     } catch (error) {
-      console.error("Erreur chargement produits client :", error);
-      toast.error("Impossible de charger les créations depuis le serveur");
+      // Le serveur ne répond pas ? Pas de panique ! 
+      // On ne crash pas le site, on laisse discrètement les produitsMock actifs
+      console.warn("Mode Secours : Le serveur ne répond pas. Affichage des données mockées.");
     }
   };
 
-  // 3. ON LANCE LE CHARGEMENT DES PRODUITS AU DÉMARRAGE DU SITE
   useEffect(() => {
     getProductsData();
   }, []);
 
-  // --- LOGIQUE DES SUGGESTIONS CENTRALISÉE ---
-  const suggestions = useMemo(() => {
-    if (!recherche.trim()) return [];
-    return produits
-      .filter(p => p.nom && p.nom.toLowerCase().includes(recherche.toLowerCase())) // Changement p.name -> p.nom car ta bdd utilise 'nom'
-      .slice(0, 5); 
-  }, [recherche, produits]);
 
-  // Déclenche l'affichage du menu déroulant dès qu'il y a du texte
+// --- LOGIQUE DES SUGGESTIONS  ---
+const suggestions = useMemo(() => {
+  if (!recherche.trim()) return [];
+  
+  return produits
+    .filter(p => {
+      // Syntaxe unique : uniquement "nom"
+      const nomProduit = p.nom || "";
+      return nomProduit.toLowerCase().includes(recherche.toLowerCase());
+    })
+    .slice(0, 5); // Limite à 5 suggestions pour le design
+}, [recherche, produits]);
+
   useEffect(() => {
     if (recherche.trim().length > 0) {
       setShowSuggestions(true);
@@ -99,7 +105,7 @@ const ShopContextProvider = (props) => {
             totalCount += panierProduits[items][item];
           }
         } catch (error) {
-          console.error("Erreur lors du calcul du panier pour l'id:", items, error);
+          console.error("Erreur panier ID :", items, error);
         }
       }
     }
@@ -115,14 +121,13 @@ const ShopContextProvider = (props) => {
   const getPanierMontant = () => {
     let totalMontant = 0;
     for (const items in panierProduits) {
-      // Recherche sur l'id généré par MongoDB (_id)
-      let itemInfo = produits.find((produit) => produit._id === items);
-      if (itemInfo) { // On s'assure que le produit existe bien dans notre liste bdd
+      let itemInfo = produits.find((produit) => (produit._id === items || produit.id === items));
+      if (itemInfo) { 
         for (const item in panierProduits[items]) {
           try {
             if (panierProduits[items][item] > 0) {
-              // Attention : p.prix (Bdd) au lieu de p.price (Fichier de test)
-              const prixProduit = itemInfo.prix || itemInfo.price;
+              // S'adapte au mock (price) ou à la bdd (prix)
+              const prixProduit = itemInfo.prix || itemInfo.price || 0;
               totalMontant += prixProduit * panierProduits[items][item];
             }
           } catch (error) {
